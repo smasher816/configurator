@@ -1,20 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, Dialog, DialogContent, DialogActions, DialogTitle, Button } from '../mui';
-import { useConfigureState, updateSelected } from '../state/configure';
+import { withStyles } from '../mui';
 import KeyGroups from './key-groups';
-import Cap from './cap';
-import { keymap } from '../../common/keys/predefined';
 
-const styles = {
-  container: {
-    padding: 10,
-    paddingLeft: 30
-  },
-  message: {
-    fontStyle: 'oblique'
-  }
-};
+const styles = {};
 
 function Preferences(props) {
   const { classes } = props;
@@ -33,31 +22,8 @@ function Preferences(props) {
   };
 
   return (
-    <div className={classes.container}>
-      {!selected && (
-        <span className={classes.message}>
-          <Typography component="h4">No key currently selected</Typography>
-        </span>
-      )}
-      {selected && (
-        <div>
-          <div>
-            <Typography>Assigned Key</Typography>
-            <Cap cap={cap} onClick={() => setAssignDialogOpen(true)} onClose={close} />
-          </div>
-          <Dialog open={assignDialogOpen} maxWidth="lg">
-            <DialogTitle>Select Key to Assign</DialogTitle>
-            <DialogContent>
-              <KeyGroups onSelect={select} />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={close} color="primary">
-                Cancel
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      )}
+    <div className={classes.balderdash}>
+      <KeyGroups />
     </div>
   );
 }

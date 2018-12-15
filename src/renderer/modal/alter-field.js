@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, Dialog, TextField, DialogContent, DialogActions } from '../mui';
+import { withStyles, Button, Modal, TextField } from '../mui';
 
-const styled = withStyles({
-  //TODO: this should probably be passed in.
-  text: {
-    minWidth: '30em'
+const styled = withStyles(theme => ({
+  paper: {
+    marginTop: '30%',
+    marginLeft: '25%',
+    width: '50vw',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: `${theme.spacing.unit * 2}px`,
+    paddingBottom: `${theme.spacing.unit}px`,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  },
+  actions: {
+    display: 'flex',
+    minHeight: 40,
+    margin: `${theme.spacing.unit}px 0`
+  },
+  spacer: {
+    flex: '1'
   }
-});
+}));
 
 function AlterFieldModal(props) {
   const { classes, open, onClose, value, name, saveText = 'Save', validation = () => {} } = props;
@@ -19,8 +35,6 @@ function AlterFieldModal(props) {
   useEffect(
     () => {
       setCurrValue(value);
-      setError(validation(value));
-      setDirty(false);
     },
     [open]
   );
@@ -38,8 +52,8 @@ function AlterFieldModal(props) {
   };
 
   return (
-    <Dialog open={open} onClose={cancel}>
-      <DialogContent>
+    <Modal open={open} onClose={cancel}>
+      <div className={classes.paper}>
         <form onSubmit={save}>
           <TextField
             value={currValue}
@@ -47,21 +61,21 @@ function AlterFieldModal(props) {
             onBlur={() => setDirty(true)}
             label={name}
             fullWidth
-            className={classes.text}
             helperText={dirty ? error : ''}
             error={dirty && !!error}
           />
+          <div className={classes.actions}>
+            <div className={classes.spacer} />
+            <Button onClick={cancel} type="button">
+              Cancel
+            </Button>
+            <Button type="submit" disabled={!dirty || !!error}>
+              {saveText}
+            </Button>
+          </div>
         </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={cancel} type="button">
-          Cancel
-        </Button>
-        <Button type="submit" disabled={!dirty || !!error}>
-          {saveText}
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </div>
+    </Modal>
   );
 }
 
