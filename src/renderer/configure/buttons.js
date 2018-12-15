@@ -26,7 +26,7 @@ import {
 } from '../icons';
 import { useSettingsState, addDownload } from '../state/settings';
 import { useConfigureState, currentConfig, updateConfig } from '../state/configure';
-import { useCoreState, updatePanel, Panels } from '../state/core';
+import { useCoreState, updatePanel, Panels, popupToast } from '../state/core';
 import { loadRemoteConfig, loadLocalConfig } from '../state';
 import { tooltipped } from '../utils';
 import { SuccessToast, ErrorToast } from '../toast';
@@ -230,9 +230,9 @@ export { LayoutHistoryButtonStyled as LayoutHistoryButton };
 export function CompileFirmwareButton() {
   const [baseUri] = useSettingsState('uri');
   const [variant] = useCoreState('variant');
-  const [toast, setToast] = useState(null);
   const [log, setLog] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const click = async () => {
     if (loading) return;
@@ -243,17 +243,12 @@ export function CompileFirmwareButton() {
       console.log(result);
       if (result.success) {
         await addDownload(result.firmware);
-        setToast(
+        popupToast(
           <SuccessToast
             message={<span>Compilation Successful</span>}
-            actions={[
-              <Button key="flash" onClick={() => updatePanel(Panels.Flash)} color="inherit">
-                Flash
-              </Button>
-            ]}
-            onClose={() => setToast(null)}
           />
         );
+		updatePanel(Panels.Flash);
       } else {
         setToast(
           <ErrorToast
@@ -274,9 +269,13 @@ export function CompileFirmwareButton() {
 
   const button = tooltipped(
     'Download Firmware',
-    <IconButton onClick={click} disabled={loading}>
+    <Button variant="contained"
+            color="primary"
+			onClick={click}
+			disabled={loading}>
       {!loading ? <FlashOnIcon fontSize="small" /> : <CircularProgress size={20} thickness={3} />}
-    </IconButton>
+	  Download Firmware
+    </Button>
   );
 
   return (
