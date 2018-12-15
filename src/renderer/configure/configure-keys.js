@@ -1,6 +1,5 @@
 import React from 'react';
-import { Typography } from '../mui';
-import { CodeIcon, TuneIcon, VariableIcon, MagnifyIcon } from '../icons';
+import { CodeIcon, TuneIcon, EditIcon } from '../icons';
 import { useConfigureState } from '../state/configure';
 import LayerSelect from './layer-select';
 import OnScreenKeyboard from './onscreen-keyboard';
@@ -13,13 +12,8 @@ import { tooltipped } from '../utils';
 const tabs = [
   {
     id: 'tab/key-info',
-    icon: tooltipped('Key Info', <MagnifyIcon fontSize="large" />),
+    icon: tooltipped('Key Info', <EditIcon fontSize="large" />),
     tab: <KeyInfo />
-  },
-  {
-    id: 'tab/macros',
-    icon: tooltipped('Macros', <VariableIcon fontSize="large" />),
-    tab: <Typography component="h1">uhhh.. yo</Typography>
   },
   {
     id: 'tab/custom-kll',
