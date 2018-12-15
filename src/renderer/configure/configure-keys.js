@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withStyles, Typography } from '../mui';
-import { CodeIcon, TuneIcon, VariableIcon, MagnifyIcon } from '../icons';
+import { withStyles } from '../mui';
+import { CodeIcon, TuneIcon, EditIcon } from '../icons';
 import { useConfigureState } from '../state/configure';
 import LayerSelect from './layer-select';
 import OnScreenKeyboard from './onscreen-keyboard';
@@ -16,17 +16,8 @@ import { CompileFirmwareButton } from './buttons';
 const tabs = [
   {
     id: 'tab/key-info',
-    icon: tooltipped('Key Info', <MagnifyIcon fontSize="large" />),
+    icon: tooltipped('Key Info', <EditIcon fontSize="large" />),
     tab: <KeyInfo />
-  },
-  {
-    id: 'tab/macros',
-    icon: tooltipped('Macros', <VariableIcon fontSize="large" />),
-    tab: (
-      <Typography component="h1" style={{ fontStyle: 'oblique' }}>
-        Not implemented yet.
-      </Typography>
-    )
   },
   {
     id: 'tab/custom-kll',

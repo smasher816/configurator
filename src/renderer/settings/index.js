@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles, Divider, Paper, Tab, Tabs } from '../mui';
-import { AccountSettingsIcon, FolderDownloadIcon, MovieRollIcon, WindowsIcon } from '../icons';
+import { AccountSettingsIcon } from '../icons';
 
 import Preferences from './preferences';
 import Animations from './animations';
@@ -25,7 +25,7 @@ const styles = {
 
 function Settings(props) {
   const { classes } = props;
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     updateToolbarButtons(
@@ -41,9 +41,6 @@ function Settings(props) {
     <Paper square className={classes.root}>
       <Tabs fullWidth value={index} onChange={(_, value) => setIndex(value)}>
         <Tab label="Preferences" icon={<AccountSettingsIcon />} />
-        <Tab label="Animations" icon={<MovieRollIcon />} />
-        <Tab label="Downloads" icon={<FolderDownloadIcon />} />
-        <Tab label="Drivers" icon={<WindowsIcon />} />
       </Tabs>
       <Divider />
       <div className={classes.container}>
