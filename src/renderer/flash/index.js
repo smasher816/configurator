@@ -6,8 +6,9 @@ import _ from 'lodash';
 import { useConnectedKeyboards } from '../hooks';
 import { withStyles, deepOrange, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '../mui';
 import { FolderOpen } from '../icons';
-import { updateToolbarButtons } from '../state/core';
+import { updateToolbarButtons, updatePanel, Panels, popupToast } from '../state/core';
 import { useSettingsState, updateDfu } from '../state/settings';
+import { SuccessToast, ErrorToast } from '../toast';
 import { BackButton, SettingsButton, HomeButton } from '../buttons';
 
 //@ts-ignore
@@ -274,7 +275,15 @@ function Flash(props) {
     const cmd = ChildProcess.spawn(dfuPath, ['-D', binPath]);
     cmd.stdout.on('data', d => setProgress(curr => curr + d + '\n'));
     cmd.stderr.on('data', d => setProgress(curr => curr + 'ERROR: ' + d + '\n'));
-    cmd.on('close', code => setProgress(curr => curr + '\nExited with code ' + code));
+    cmd.on('close', code => {
+      setProgress(curr => curr + '\nExited with code ' + code);
+      if (code == 0) {
+        popupToast(<SuccessToast message={<span>Flashing Successful</span>} onClose={() => popupToast(null)} />);
+        updatePanel(Panels.ConfigureKeys);
+      } else {
+        popupToast(<ErrorToast message={<span>Error Flashing</span>} onClose={() => popupToast(null)} />);
+      }
+    });
   }
 }
 
