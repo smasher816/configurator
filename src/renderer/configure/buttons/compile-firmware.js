@@ -125,7 +125,7 @@ function CompileFirmwareButton(props) {
 
   return (
     <div>
-      <Fab variant="extended" onClick={click} disabled={compiling} style={{ position: 'absolute', right: 0, top: -20 }}>
+      <Fab variant="extended" color="primary" onClick={click} disabled={compiling} style={{ position: 'absolute', right: 0, top: -20 }}>
         {!compiling ? (
           <FlashOnIcon className={classes.icon} />
         ) : (
