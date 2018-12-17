@@ -10,6 +10,9 @@ import { updateToolbarButtons } from '../state/core';
 import { useSettingsState, updateDfu } from '../state/settings';
 import { BackButton, SettingsButton, HomeButton } from '../buttons';
 
+//@ts-ignore
+const staticDir = __static;
+
 /** @type {import('../theme').ThemedCssProperties} */
 const styles = theme => ({
   text: {
@@ -39,6 +42,10 @@ const styles = theme => ({
   warn: {
     fontStyle: 'oblique',
     color: 'red'
+  },
+  success: {
+    fontStyle: 'oblique',
+    color: 'green'
   }
 });
 
@@ -47,6 +54,7 @@ function Flash(props) {
   const connected = useConnectedKeyboards();
   const [lastDl] = useSettingsState('lastDl');
   const bin = lastDl ? (_.isString(lastDl.bin) ? lastDl.bin : lastDl.bin.left) : '';
+  const board = lastDl ? lastDl.board : undefined;
   const [dfuPath] = useSettingsState('dfu');
   const [binPath, setBinPath] = useState(bin);
   const [progress, setProgress] = useState('');
@@ -64,15 +72,91 @@ function Flash(props) {
 
   useLayoutEffect(updateScroll, [progress]);
 
+  let found = connected.find(x => x.known.names.some(n => n == board));
+
+  let error = null;
+  if (!found) {
+    error = (
+      <Grid container direction="column">
+        <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+          <Grid item xs={5}>
+            <Typography variant="subtitle2" className={classes.warn}>
+              No keyboard found. Please connect your {board}.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  } else if (!found.known.isFlashable) {
+    let resetCombo = null;
+    if (board == 'Kira') {
+      resetCombo = '"Right Ctrl + Right Alt + Esc"';
+    } else {
+      resetCombo = '"Fn + Esc"';
+    }
+
+    error = (
+      <Grid container direction="column">
+        <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+          <Grid item xs={5}>
+            <img className={classes.image} src={`file:${staticDir}/img/reset-button.png`} style={{width: '100%'}} />
+          </Grid>
+        </Grid>
+        <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+          <Grid item xs={5}>
+            <Typography variant="subtitle2" className={classes.warn}>
+              Press the reset button on the bottom of your keyboard to enter flash mode.
+            </Typography>
+            {resetCombo && (
+              <Typography variant="subtitle2">
+                Pressing {resetCombo} may also work.
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
+        <br/>
+      </Grid>
+    );
+  } else if (!dfuPath) {
+    error = (
+      <Grid container direction="column">
+        <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+          <Grid item xs={5}>
+            <Typography variant="subtitle2" className={classes.warn}>
+              Please specify the location of dfu-util.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  } else if (!binPath) {
+    error = (
+      <Grid container direction="column">
+        <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+          <Grid item xs={5}>
+            <Typography variant="subtitle2" className={classes.warn}>
+              Please specify a file to flash.
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
     <div>
       <Typography variant="subtitle1">Flash Firmware</Typography>
-      {!connected.some(x => x.known.isFlashable) && (
-        <Typography variant="subtitle2" className={classes.warn}>
-          Cannot detect keyboard in flash mode
-        </Typography>
-      )}
+      {error}
       <Grid container spacing={8} direction="column">
+        {found && found.known.isFlashable && (
+          <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
+            <Grid item xs={5}>
+              <Typography variant="subtitle2" className={classes.success}>
+                Found {found.keyboard.display} in flash mode.
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
         <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
           <Grid item xs>
             <TextField
@@ -84,6 +168,7 @@ function Flash(props) {
               variant="outlined"
               className={classes.text}
               required
+              error={!dfuPath}
               InputProps={{
                 classes: { input: classes.resizeFont },
                 endAdornment: (
@@ -113,7 +198,7 @@ function Flash(props) {
               color="primary"
               className={classes.button}
               onClick={flash}
-              disabled={!dfuPath || !binPath}
+              disabled={error != null}
             >
               Flash
             </Button>
@@ -132,6 +217,7 @@ function Flash(props) {
               className={classes.text}
               // error={!!binPath.length && !binPath.endsWith('.bin')}
               helperText={binPath.length && !binPath.endsWith('.bin') ? 'does not appear to be .bin file' : null}
+              error={!binPath}
               InputProps={{
                 classes: { input: classes.resizeFont },
                 endAdornment: (
@@ -156,7 +242,7 @@ function Flash(props) {
           </Grid>
           <Grid item xs={3} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={9}>
           <TextField
             fullWidth
             multiline
