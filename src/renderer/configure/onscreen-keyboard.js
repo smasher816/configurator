@@ -133,11 +133,8 @@ function OnScreenKeyboard(props) {
 
   /** @type {(e: MouseEvent, key: any) => void} */
   const mouseClick = (e, key) => {
-    if (e.shiftKey) {
-      setQuickAssignKey(key);
-    } else {
-      setSelected(key === selected ? undefined : key);
-    }
+    setQuickAssignKey(key);
+    setSelected(key === selected ? undefined : key);
   };
 
   const quickAssign = k => {
