@@ -3,7 +3,7 @@ import { createSharedState } from '../shared-state/index';
 import db from '../db';
 
 const dev = process.env.NODE_ENV !== 'production';
-const defaultUri = dev ? 'http://localhost:8080' : 'https://configurator.input.club';
+const defaultUri = dev ? 'http://vash.input.club:3000' : 'https://configurator.input.club';
 
 const DbKey = {
   dfuPath: 'dfu-path',
@@ -46,8 +46,8 @@ export function _currentState(name) {
 }
 
 export async function loadFromDb() {
-  setSettingsState('dfu', (await db.core.get(DbKey.dfuPath)) || '');
-  setSettingsState('kiidrv', await db.core.get(DbKey.kiidrvPath));
+  setSettingsState('dfu', (await db.core.get(DbKey.dfuPath)) || 'dfu-util');
+  setSettingsState('kiidrv', await db.core.get(DbKey.kiidrvPath) || 'kiidrv');
   setSettingsState('lastDl', await db.core.get(DbKey.lastDl));
   setSettingsState('recentDls', (await db.core.get(DbKey.recentDls)) || {});
   setSettingsState('lastVersionCheck', (await db.core.get(DbKey.lastVerCheck)) || 0);
