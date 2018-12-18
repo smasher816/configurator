@@ -100,7 +100,7 @@ function Flash(props) {
       <Grid container direction="column">
         <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
           <Grid item xs={5}>
-            <img className={classes.image} src={`file:${staticDir}/img/reset-button.png`} style={{width: '100%'}} />
+            <img className={classes.image} src={`file:${staticDir}/img/reset-button.png`} style={{ width: '100%' }} />
           </Grid>
         </Grid>
         <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
@@ -108,14 +108,10 @@ function Flash(props) {
             <Typography variant="subtitle2" className={classes.warn}>
               Press the reset button on the bottom of your keyboard to enter flash mode.
             </Typography>
-            {resetCombo && (
-              <Typography variant="subtitle2">
-                Pressing {resetCombo} may also work.
-              </Typography>
-            )}
+            {resetCombo && <Typography variant="subtitle2">Pressing {resetCombo} may also work.</Typography>}
           </Grid>
         </Grid>
-        <br/>
+        <br />
       </Grid>
     );
   } else if (!dfuPath) {

@@ -119,7 +119,7 @@ function OnScreenKeyboard(props) {
 
     const localKey = adjKey || key;
     if (!localKey) {
-      console.warn(`unrecognized code '${e.keyCode}' - '${e.key}'`);
+      //console.warn(`unrecognized code '${e.keyCode}' - '${e.key}'`);
       return;
     }
     // Now that we know we're going to handle this stop propogation and defaults

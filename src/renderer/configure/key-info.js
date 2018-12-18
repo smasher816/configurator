@@ -23,7 +23,7 @@ function Preferences(props) {
   const [layer] = useConfigureState('layer');
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
 
-  console.log(selected);
+  //console.log(selected);
   const key = selected && selected.layers[layer] && selected.layers[layer].key;
   const cap = keymap[key] || {};
 

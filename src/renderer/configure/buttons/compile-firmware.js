@@ -31,7 +31,7 @@ async function compile(baseUri, variant) {
   try {
     const config = currentConfig();
     const payload = { config, env: 'latest' };
-    console.log(config);
+    //console.log(config);
     const uri = urljoin(baseUri, 'download.php');
     const response = await fetch(uri, {
       method: 'POST',
@@ -41,10 +41,10 @@ async function compile(baseUri, variant) {
       },
       body: JSON.stringify(payload)
     });
-    console.log(response);
+    //console.log(response);
 
     if (response.status !== 200) {
-      console.error('Failed to compile.');
+      //console.error('Failed to compile.');
       return { success: false };
     }
 
@@ -98,7 +98,7 @@ function CompileFirmwareButton(props) {
     setToast(null);
     try {
       const result = await compile(baseUri, variant);
-      console.log(result);
+      //console.log(result);
       if (result.success) {
         await addDownload(result.firmware);
         popupToast(<SuccessToast message={<span>Compilation Successful</span>} onClose={() => popupToast(null)} />);
@@ -125,7 +125,13 @@ function CompileFirmwareButton(props) {
 
   return (
     <div>
-      <Fab variant="extended" color="primary" onClick={click} disabled={compiling} style={{ position: 'absolute', right: 0, top: -20 }}>
+      <Fab
+        variant="extended"
+        color="primary"
+        onClick={click}
+        disabled={compiling}
+        style={{ position: 'absolute', right: 0, top: -20 }}
+      >
         {!compiling ? (
           <FlashOnIcon className={classes.icon} />
         ) : (

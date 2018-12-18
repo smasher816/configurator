@@ -50,7 +50,7 @@ function safeOpen(device) {
     device.open();
     return true;
   } catch (e) {
-    console.warn(`Could not open device ${devicePath(device)}`, e);
+    //console.warn(`Could not open device ${devicePath(device)}`, e);
     return false;
   }
 }
@@ -64,7 +64,7 @@ function safeClose(device) {
     device.close();
     return true;
   } catch (e) {
-    console.warn(`Could not close device ${devicePath(device)}`, e);
+    //console.warn(`Could not close device ${devicePath(device)}`, e);
     return false;
   }
 }

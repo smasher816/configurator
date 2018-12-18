@@ -35,7 +35,7 @@ function Group(props) {
   const keys = _.orderBy(items, 'order');
 
   return (
-    <ExpansionPanel defaultExpanded='true'>
+    <ExpansionPanel defaultExpanded="true">
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <Typography className={classes.groupName}>{group}</Typography>
       </ExpansionPanelSummary>
