@@ -14,8 +14,9 @@ export async function identifyKeyboard(usb) {
   }
 
   const detail = await getDeviceDetails(usb);
+  //console.log('detail', detail);
 
-  let keyboard = keyboards.find(x => !!x.names.find(y => detail.product.includes(y)));
+  let keyboard = keyboards.find(x => !!x.names.find(y => detail.product && detail.product.includes(y)));
 
   return keyboard;
 }
