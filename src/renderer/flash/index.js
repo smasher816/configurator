@@ -13,6 +13,7 @@ import { BackButton, SettingsButton, HomeButton } from '../buttons';
 
 //@ts-ignore
 const staticDir = __static;
+const ENOENT = -4058;
 
 /** @type {import('../theme').ThemedCssProperties} */
 const styles = theme => ({
@@ -59,6 +60,7 @@ function Flash(props) {
   const [dfuPath] = useSettingsState('dfu');
   const [binPath, setBinPath] = useState(bin);
   const [progress, setProgress] = useState('');
+  const [dfuFound, setDfuFound] = useState(true);
   const progressTextBox = useRef(null);
 
   useEffect(() => {
@@ -170,7 +172,7 @@ function Flash(props) {
               variant="outlined"
               className={classes.text}
               required
-              error={!dfuPath}
+              error={!dfuPath || !dfuFound}
               InputProps={{
                 classes: { input: classes.resizeFont },
                 endAdornment: (
@@ -273,6 +275,7 @@ function Flash(props) {
 
   function flash() {
     setProgress('');
+    setDfuFound(true);
     const cmd = ChildProcess.spawn(dfuPath, ['-D', binPath]);
     cmd.stdout.on('data', d => setProgress(curr => curr + d + '\n'));
     cmd.stderr.on('data', d => setProgress(curr => curr + 'ERROR: ' + d + '\n'));
@@ -281,9 +284,15 @@ function Flash(props) {
       if (code == 0) {
         popupToast(<SuccessToast message={<span>Flashing Successful</span>} onClose={() => popupToast(null)} />);
         updatePanel(Panels.ConfigureKeys);
+      } else if (code == ENOENT) {
+        popupToast(<ErrorToast message={<span>dfu-util not found</span>} onClose={() => popupToast(null)} />);
+        setDfuFound(false);
       } else {
-        popupToast(<ErrorToast message={<span>Error Flashing</span>} onClose={() => popupToast(null)} />);
+        popupToast(<ErrorToast message={<span>Error Flashing. Check log.</span>} onClose={() => popupToast(null)} />);
       }
+    });
+    cmd.on('error', function() {
+      // catch error so close still gets called
     });
   }
 }
