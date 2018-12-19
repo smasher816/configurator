@@ -73,7 +73,12 @@ function Flash(props) {
 
   useLayoutEffect(updateScroll, [progress]);
 
-  let found = connected.find(x => x.known.names.some(n => n == board));
+  let found = null;
+  if (board) {
+    found = connected.find(x => x.known.names.some(n => n == board));
+  } else {
+    found = connected.find(x => x.known);
+  }
 
   let error = null;
   if (!found) {
