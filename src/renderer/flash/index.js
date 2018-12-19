@@ -15,6 +15,9 @@ import { BackButton, SettingsButton, HomeButton } from '../buttons';
 const staticDir = __static;
 const ENOENT = -4058;
 
+// TODO: If is windows
+const defaultDfuDir = 'C:\\Program Files (x86)\\Kiibohd Configurator\\utils';
+
 /** @type {import('../theme').ThemedCssProperties} */
 const styles = theme => ({
   text: {
@@ -183,7 +186,8 @@ function Flash(props) {
                         openDialog(
                           'path to dfu-util',
                           [{ name: 'All Files', extensions: ['*'] }],
-                          paths => paths.length && updateDfu(paths[0])
+                          defaultDfuDir,
+                          paths => paths && paths.length && updateDfu(paths[0])
                         )
                       }
                     >
@@ -232,7 +236,8 @@ function Flash(props) {
                         openDialog(
                           'firmware to flash',
                           [{ name: 'bin files', extensions: ['bin'] }],
-                          paths => paths.length && setBinPath(paths[0])
+                          undefined,
+                          paths => paths && paths.length && setBinPath(paths[0])
                         )
                       }
                     >
@@ -269,8 +274,8 @@ function Flash(props) {
     }
   }
 
-  function openDialog(title, filters, cb) {
-    electron.remote.dialog.showOpenDialog({ title, filters, properties: ['openFile'] }, cb);
+  function openDialog(title, filters, defaultPath, cb) {
+    electron.remote.dialog.showOpenDialog({ title, defaultPath, filters, properties: ['openFile'] }, cb);
   }
 
   function flash() {
