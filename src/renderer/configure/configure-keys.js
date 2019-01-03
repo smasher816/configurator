@@ -43,7 +43,10 @@ const tabs = [
     id: 'tab/animations',
     icon: tooltipped('Animations Overview', <AnimationIcon fontSize="large" />),
     tab: <AnimationList />
-  },
+  }
+];
+
+const tabsRight = [
   {
     id: 'tab/custom-kll',
     icon: tooltipped('Custom KLL', <CodeIcon fontSize="large" />),
@@ -84,7 +87,7 @@ function ConfigureKeys(props) {
         </div>
       </div>
       <div>
-        <SideTabs items={tabs} />
+        <SideTabs items={tabs} itemsRight={tabsRight} />
       </div>
     </>
   );

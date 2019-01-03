@@ -45,7 +45,10 @@ const tabs = [
     id: 'tab/animations',
     icon: tooltipped('Animations Overview', <AnimationIcon fontSize="large" />),
     tab: <AnimationList />
-  },
+  }
+];
+
+const tabsRight = [
   {
     id: 'tab/custom-kll',
     icon: tooltipped('Custom KLL', <CodeIcon fontSize="large" />),
@@ -67,7 +70,7 @@ const styles = {
   },
   leds: {
     boxSizing: 'content-box',
-    display: 'inline-block',
+    display: 'inline-block'
   },
   hidden: {
     display: 'none'
@@ -122,7 +125,7 @@ function ConfigureVisuals(props) {
         </div>
       </div>
       <div>
-        <SideTabs items={tabs} />
+        <SideTabs items={tabs} itemsRight={tabsRight} />
       </div>
     </>
   );
