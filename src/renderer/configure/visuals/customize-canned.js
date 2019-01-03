@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -8,7 +8,7 @@ import { SwatchedChromePicker } from '../../common';
 import { framesToString, Injection } from '../../../common/config';
 import { process } from './canned';
 import log from 'loglevel';
-import { addAnimation, updateCustomKll } from '../../state/configure';
+import { addAnimation, updateCustomKll, setSelectedAnimation, setAnimationData } from '../../state/configure';
 import { popupToast } from '../../state/core';
 import { SuccessToast } from '../../toast';
 
@@ -59,14 +59,11 @@ function CustomizeCanned(props) {
   const [canned] = useConfigureState('canned');
   const [animations] = useConfigureState('animations');
   const [customKll] = useConfigureState('custom');
-  const [active, setActive] = useState('');
+  const [active] = useConfigureState('selectedAnimation');
   /** @type {[Object, React.Dispatch<React.SetStateAction<Object>>]} */
-  const [data, setData] = useState({});
+  const [data] = useConfigureState('animationData');
 
   const validateName = name => {
-    if (animations[name]) {
-      return 'An animation already exists with that name';
-    }
     const rx = /^[A-Za-z_][A-Za-z0-9_]*$/;
     if (!name || !name.length || !rx.test(name)) {
       return 'Invalid name - valid characters [A-Za-z0-9_] must not start with number';
@@ -74,33 +71,39 @@ function CustomizeCanned(props) {
   };
 
   const changeActive = name => {
-    const initial = { name };
+    const initial = { name: name, can: name };
     canned[name].configurable.map(item => (initial[item.name] = item.default));
-    setData(initial);
-    setActive(name);
+    setSelectedAnimation(name);
+    setAnimationData(initial);
   };
 
   const update = (name, value) => {
-    setData(curr => ({ ...curr, ...{ [name]: value } }));
+    setAnimationData(curr => ({ ...curr, ...{ [name]: value } }));
   };
 
   const can = active ? canned[active] : undefined;
 
   const error = data && validateName(data.name);
 
+  const edit = !!animations[data.name];
+
   const create = () => {
     const frames = can.frames.map(f => process(can.configurable, data, f, can.version));
     const settings = process(can.configurable, data, can.settings, can.version);
+    const name = data.name;
+
+		//delete data['name'];
 
     /** @type {Partial<import('../../../common/config/types').ConfigAnimation>} */
     const animation = {
       frames: framesToString(frames),
-      settings
+      settings,
+      data: data
     };
 
     log.debug(animation);
 
-    addAnimation(data.name, 'canned', animation);
+    addAnimation(name, 'canned', animation);
     if (can['custom-kll'] && can['custom-kll'].length) {
       const inj = Injection.animation;
       // TODO: target layer for injection
@@ -108,33 +111,39 @@ function CustomizeCanned(props) {
       const addition = `${inj.start}${kll}${inj.end}`.replace(inj.tokenRx, data.name);
       updateCustomKll((customKll['0'] || '') + addition, 0);
     }
-    setActive('');
-    popupToast(
-      <SuccessToast message={`Successfully added animation '${data.name}'`} onClose={() => popupToast(null)} />
-    );
+
+    if (!edit) {
+      setSelectedAnimation('');
+      setAnimationData({});
+      popupToast(<SuccessToast message={`Successfully added animation '${name}'`} onClose={() => popupToast(null)} />);
+    }
   };
 
   return (
     <div className={classes.container}>
-      <Typography variant="subtitle1">Customize Prebuilt Animation</Typography>
-      <div className={classes.row}>
-        <FormControl className={classes.animationSelect}>
-          <InputLabel htmlFor="animation">Animation</InputLabel>
-          <Select
-            value={active}
-            onChange={e => changeActive(e.target.value)}
-            inputProps={{ name: 'animation', id: 'animation' }}
-          >
-            {_.keys(canned).map(name => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      {!edit && (
+        <>
+          <Typography variant="subtitle1">Customize Prebuilt Animation</Typography>
+          <div className={classes.row}>
+            <FormControl className={classes.animationSelect}>
+              <InputLabel htmlFor="animation">Animation</InputLabel>
+              <Select
+                value={active}
+                onChange={e => changeActive(e.target.value)}
+                inputProps={{ name: 'animation', id: 'animation' }}
+              >
+                {_.keys(canned).map(name => (
+                  <MenuItem key={name} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-        {!!active && <Typography className={classes.descr}>{can.description}</Typography>}
-      </div>
+            {!!active && <Typography className={classes.descr}>{can.description}</Typography>}
+          </div>
+        </>
+      )}
       {!!active && !!data && (
         <div className={classes.customizations}>
           <div className={classes.row}>
@@ -148,7 +157,7 @@ function CustomizeCanned(props) {
               error={!!error}
             />
             <Button color="primary" variant="contained" onClick={create} disabled={!!error}>
-              Create
+              {edit ? 'Update' : 'Create'}
             </Button>
           </div>
           {can.configurable.map(item => (

@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { useConfigureState, addAnimation, updateAnimation, renameAnimation } from '../../state/configure';
+import {
+  useConfigureState,
+  addAnimation,
+  updateAnimation,
+  renameAnimation,
+  setSelectedAnimation,
+  setAnimationData
+} from '../../state/configure';
 import { withStyles, Button, MenuItem, Select, FormControl, InputLabel, Typography, TextField } from '../../mui';
 import { AlterFieldModal } from '../../modal';
 import { fontStack } from '../../theme';
+import CustomizeCanned from './customize-canned';
 
 /** @type {import('../../theme').CssProperties} */
 const styles = {
@@ -47,7 +55,17 @@ function AnimationEdit(props) {
   const [showNew, setShowNew] = useState(false);
 
   const activeAnimation = active.length && animations[active];
-  const selectedAnimationChange = e => setActive(e.target.value);
+
+  const selectedAnimationChange = e => {
+    const name = e.target.value;
+    setActive(name);
+    if (animations[name].type == 'canned') {
+      let data = { name, ...animations[name].data };
+      setSelectedAnimation(data.can);
+      setAnimationData(data);
+    }
+  };
+
   const rawAnimationChange = e => updateAnimation(active, { frames: e.target.value });
   const settingChange = e => updateAnimation(active, { settings: e.target.value });
 
@@ -77,6 +95,38 @@ function AnimationEdit(props) {
     }
   };
 
+  let animationDetails = null;
+  if (activeAnimation.type == 'canned') {
+    // TODO: Insert canned pannel
+    animationDetails = <CustomizeCanned />;
+  } else {
+    animationDetails = (
+      <>
+        <div className={classes.row}>
+          <TextField
+            fullWidth
+            label="Settings"
+            value={activeAnimation.settings || ''}
+            InputProps={{ className: classes.text }}
+            onChange={settingChange}
+          />
+        </div>
+        <div className={classes.row}>
+          <TextField
+            fullWidth
+            multiline
+            rows="20"
+            rowsMax="20"
+            label="Frames"
+            InputProps={{ className: classes.text }}
+            value={activeAnimation.frames || ''}
+            onChange={rawAnimationChange}
+          />
+        </div>
+      </>
+    );
+  }
+
   return (
     <form>
       <div className={classes.container}>
@@ -103,31 +153,7 @@ function AnimationEdit(props) {
             Add New
           </Button>
         </div>
-        {!!activeAnimation && (
-          <>
-            <div className={classes.row}>
-              <TextField
-                fullWidth
-                label="Settings"
-                value={activeAnimation.settings || ''}
-                InputProps={{ className: classes.text }}
-                onChange={settingChange}
-              />
-            </div>
-            <div className={classes.row}>
-              <TextField
-                fullWidth
-                multiline
-                rows="20"
-                rowsMax="20"
-                label="Frames"
-                InputProps={{ className: classes.text }}
-                value={activeAnimation.frames || ''}
-                onChange={rawAnimationChange}
-              />
-            </div>
-          </>
-        )}
+        {!!activeAnimation && <>{animationDetails}</>}
         <AlterFieldModal
           open={showNew}
           value={''}

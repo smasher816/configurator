@@ -49,6 +49,8 @@ const initialState = {
   canned: undefined,
   selected: undefined,
   selectedLeds: [],
+  selectedAnimation: '',
+  animationData: {},
   ledStatus: {},
   keyboardHidden: false,
   ui: {
@@ -71,6 +73,8 @@ export function reset() {
   setConfigureState('layout', undefined);
   setConfigureState('selected', undefined);
   setConfigureState('selectedLeds', []);
+  setConfigureState('selectedAnimation', '');
+  setConfigureState('animationData', {});
   setConfigureState('keyboardHidden', false);
   setConfigureState('raw', undefined);
   setConfigureState('headers', undefined);
@@ -296,6 +300,20 @@ export function addSelectedLeds(leds) {
  */
 export function setSelectedLeds(leds) {
   setConfigureState('selectedLeds', leds || []);
+}
+
+/**
+ * @param {string} animation
+ */
+export function setSelectedAnimation(animation) {
+  setConfigureState('selectedAnimation', animation);
+}
+
+/**
+ * @param {Object} data
+ */
+export function setAnimationData(data) {
+  setConfigureState('animationData', data);
 }
 
 /**
