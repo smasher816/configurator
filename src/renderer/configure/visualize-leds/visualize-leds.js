@@ -1,9 +1,15 @@
 import React, { useReducer, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '../../mui';
-import { Palette } from '../styles';
+import { Palette, getLayerFg } from '../styles';
 import { getSize } from '../../../common/config';
-import { useConfigureState, addSelectedLeds, setSelectedLeds } from '../../state/configure';
+import {
+  useConfigureState,
+  setConfigureState,
+  addSelectedLeds,
+  setSelectedLeds,
+  setLedStatus
+} from '../../state/configure';
 import Key from './key';
 import Led from './led';
 // TODO: Major refactor, this is ugly right now, but it works...
@@ -12,9 +18,9 @@ import Led from './led';
 const styles = {
   backdrop: {
     backgroundColor: Palette.lightgray,
-    borderLeft: '1px solid transparent',
-    borderRight: '1px solid transparent',
-    borderBottom: '1px solid transparent'
+    borderLeft: '1px solid black',
+    borderRight: '1px solid black',
+    borderBottom: '1px solid black'
   },
   innerContainer: {
     position: 'relative'
@@ -174,6 +180,12 @@ function VisualizeLeds(props) {
   const [ledStatus] = useConfigureState('ledStatus');
   const { height, width } = getSize(matrix, ui.sizeFactor);
 
+  const [animations] = useConfigureState('animations');
+  const [preset] = useConfigureState('preset');
+
+  const active = 'preset' + preset;
+  const activeAnimation = active.length && animations[active];
+
   /** @type {(e: React.MouseEvent, led: import('../../../common/config/types').ConfigLed) => void} */
   const click = (e, led) => {
     //TODO: only select when needed
@@ -247,11 +259,32 @@ function VisualizeLeds(props) {
     [state.selected]
   );
 
+  useEffect(
+    () => {
+      const rx = /P\[(\d+)]\(\s*(\d+)s*,\s*(\d+)s*,\s*(\d+)s*\)/gm;
+      // TODO: Bulk update...
+      let match;
+      if (activeAnimation) {
+        while ((match = rx.exec(activeAnimation.frames))) {
+          const [id, r, g, b] = match.slice(1, 5).map(x => parseInt(x));
+          setLedStatus(id, { id, r, g, b });
+        }
+      }
+      return () => setConfigureState('ledStatus', {});
+    },
+    [active]
+  );
+
+  const backdropStyle = {
+    borderColor: getLayerFg(preset),
+    position: 'relative',
+    height,
+    width,
+    padding: ui.backdropPadding
+  };
+
   return (
-    <div
-      className={classes.backdrop}
-      style={{ padding: `${ui.backdropPadding}px`, position: 'relative', height, width }}
-    >
+    <div className={classes.backdrop} style={backdropStyle}>
       <div className={classes.innerContainer} onClick={e => click(e, null)} onMouseDown={mousedown} ref={containerRef}>
         {matrix.map(k => (
           <Key key={`key-${k.board}-${k.code}`} keydef={k} sizeFactor={ui.sizeFactor} />

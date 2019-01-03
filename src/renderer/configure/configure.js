@@ -5,7 +5,6 @@ import { updateToolbarButtons, useCoreState, Actions, Panels } from '../state/co
 import { SettingsButton, HomeButton } from '../buttons';
 import {
   ToggleKeyboardButton,
-  ToggleVisualsButton,
   ViewRawJsonButton,
   ImportKeymapButton,
   LayoutHistoryButton
@@ -23,7 +22,6 @@ const styles = {
 
 function Configure(props) {
   const { classes } = props;
-  const [keyboard] = useCoreState('keyboard');
   const [activePanel] = useCoreState('panel');
   const [executing] = useCoreState('executing');
 
@@ -34,7 +32,6 @@ function Configure(props) {
       updateToolbarButtons(
         <>
           <LayoutHistoryButton disabled={compiling} />
-          {keyboard.keyboard.visuals && <ToggleVisualsButton />}
           <ToggleKeyboardButton />
           <ViewRawJsonButton disabled={compiling} />
           <ImportKeymapButton disabled={compiling} />

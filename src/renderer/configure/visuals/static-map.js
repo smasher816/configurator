@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, MenuItem, Select, FormControl, InputLabel, Typography } from '../../mui';
+import { withStyles, Typography } from '../../mui';
 import {
   useConfigureState,
-  setConfigureState,
+  //setConfigureState,
   addAnimation,
   updateAnimation,
-  renameAnimation,
-  setLedStatus,
-  setSelectedLeds
+  //renameAnimation,
+  setLedStatus
 } from '../../state/configure';
-import { AlterFieldModal } from '../../modal';
+//import { AlterFieldModal } from '../../modal';
 import { SwatchedChromePicker } from '../../common';
 import _ from 'lodash';
 
@@ -52,35 +51,24 @@ const styles = {
 
 function StaticMap(props) {
   const { classes } = props;
-  const [leds] = useConfigureState('leds');
+  //const [leds] = useConfigureState('leds');
   const [animations] = useConfigureState('animations');
   const [selectedLeds] = useConfigureState('selectedLeds');
   const [ledStatus] = useConfigureState('ledStatus');
 
-  const [active, setActive] = useState('');
-  const [showRename, setShowRename] = useState(false);
-  const [showNew, setShowNew] = useState(false);
+  const [preset] = useConfigureState('preset');
+  //const [active, setActive] = useState('');
 
-  const filteredAnimations = _.toPairs(animations).filter(([, animation]) => animation.type === 'static');
+  //const [showRename, setShowRename] = useState(false);
+  //const [showNew, setShowNew] = useState(false);
 
+  //const filteredAnimations = _.toPairs(animations).filter(([, animation]) => animation.type === 'static');
+
+  const active = 'preset' + preset;
   const activeAnimation = active.length && animations[active];
-  const selectedAnimationChange = e => setActive(e.target.value);
+  //const selectedAnimationChange = e => setActive(e.target.value);
 
-  useEffect(
-    () => {
-      const rx = /P\[(\d+)]\(\s*(\d+)s*,\s*(\d+)s*,\s*(\d+)s*\)/gm;
-      // TODO: Bulk update...
-      let match;
-      while ((match = rx.exec(activeAnimation.frames))) {
-        const [id, r, g, b] = match.slice(1, 5).map(x => parseInt(x));
-        setLedStatus(id, { id, r, g, b });
-      }
-      return () => setConfigureState('ledStatus', {});
-    },
-    [active]
-  );
-
-  const create = (save, name) => {
+  /*const create = (save, name) => {
     setShowNew(false);
     if (save) {
       addAnimation(name, 'static');
@@ -105,24 +93,7 @@ function StaticMap(props) {
     if (!name.length || !rx.test(name)) {
       return 'Invalid name - valid characters [A-Za-z0-9_] must not start with number';
     }
-  };
-
-  const select = selection => {
-    switch (selection) {
-      case 'none':
-        setSelectedLeds([]);
-        break;
-      case 'backlighting':
-        setSelectedLeds(leds.filter(x => !!x.scanCode).map(x => x.id));
-        break;
-      case 'underlighting':
-        setSelectedLeds(leds.filter(x => !x.scanCode).map(x => x.id));
-        break;
-      case 'all':
-        setSelectedLeds(leds.map(x => x.id));
-        break;
-    }
-  };
+  };*/
 
   const color = _.head(selectedLeds.map(x => ledStatus[x]).filter(x => !!x)) || { r: 0, g: 0, b: 0 };
   const colorChange = color => {
@@ -138,14 +109,14 @@ function StaticMap(props) {
         .map(([id, x]) => `P[${id}](${x.r},${x.g},${x.b})`)
         .join(',\n') + ';';
 
+    if (!activeAnimation) {
+      addAnimation(active, 'static');
+      updateAnimation(active, { settings, frames: header });
+    }
     updateAnimation(active, { frames: `${header}${animation}` });
   };
 
-  return (
-    <form>
-      <div className={classes.container}>
-        <Typography variant="subtitle1">Static LED Visualization</Typography>
-
+  /*
         <div className={classes.row}>
           <FormControl className={classes.animationSelect}>
             <InputLabel htmlFor="animation">Animation</InputLabel>
@@ -168,38 +139,6 @@ function StaticMap(props) {
             Add New
           </Button>
         </div>
-        {!!activeAnimation && (
-          <>
-            <div className={classes.row}>
-              {!selectedLeds.length && <Typography>No LEDs Selected.</Typography>}
-              {!!selectedLeds.length && (
-                <div className={classes.centeredRow}>
-                  <Typography variant="subtitle1" className={classes.label}>
-                    Current Color:
-                  </Typography>
-                  <SwatchedChromePicker color={color} onChange={colorChange} />
-                </div>
-              )}
-            </div>
-            <div className={classes.row} style={{ alignItems: 'center' }}>
-              <Typography variant="subtitle1" className={classes.label}>
-                Select:
-              </Typography>
-              <Button color="primary" onClick={() => select('backlighting')}>
-                Backlighting
-              </Button>
-              <Button color="primary" onClick={() => select('underlighting')}>
-                Underlighting
-              </Button>
-              <Button color="primary" onClick={() => select('all')}>
-                All
-              </Button>
-              <Button color="primary" onClick={() => select('none')}>
-                None
-              </Button>
-            </div>
-          </>
-        )}
         <AlterFieldModal
           open={showNew}
           value={''}
@@ -216,6 +155,24 @@ function StaticMap(props) {
           onClose={rename}
           validation={validateName}
         />
+  */
+
+  return (
+    <form>
+      <div className={classes.container}>
+        <Typography variant="subtitle1">Static LED Visualization</Typography>
+
+        <div className={classes.row}>
+          {!selectedLeds.length && <Typography>No LEDs Selected.</Typography>}
+          {!!selectedLeds.length && (
+            <div className={classes.centeredRow}>
+              <Typography variant="subtitle1" className={classes.label}>
+                Current Color:
+              </Typography>
+              <SwatchedChromePicker color={color} onChange={colorChange} />
+            </div>
+          )}
+        </div>
       </div>
     </form>
   );

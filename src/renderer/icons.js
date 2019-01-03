@@ -6,6 +6,8 @@
 
 export { default as AddIcon } from '@material-ui/icons/Add';
 export { default as ArrowBackIcon } from '@material-ui/icons/ArrowBack';
+export { default as BrightnessLow } from '@material-ui/icons/BrightnessLow';
+export { default as BrightnessHigh } from '@material-ui/icons/BrightnessHigh';
 export { default as CheckCircleIcon } from '@material-ui/icons/CheckCircle';
 export { default as CheckIcon } from '@material-ui/icons/Check';
 export { default as CloseIcon } from '@material-ui/icons/Close';

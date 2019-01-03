@@ -30,7 +30,10 @@ function AnimationList(props) {
   const { classes } = props;
   const [animations] = useConfigureState('animations');
 
-  const startupCount = _.toPairs(animations).filter(([, x]) => x.settings.includes('start')).length;
+  const startupCount = _.toPairs(animations).filter(([, x]) => {
+    console.log(x);
+    return x.settings.includes('start');
+  }).length;
 
   /** @type{(name: string, anim: import('../../../common/config/types').ConfigAnimation) => void} */
   const toggleStart = (name, anim) => {

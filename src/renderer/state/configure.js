@@ -38,6 +38,7 @@ const initialState = {
   loading: false,
   layout: undefined,
   layer: 0,
+  preset: 1,
   raw: undefined,
   headers: undefined,
   matrix: undefined,
@@ -70,6 +71,7 @@ export { useConfigureState, setConfigureState };
 
 export function reset() {
   setConfigureState('layer', 0);
+  setConfigureState('preset', 1);
   setConfigureState('layout', undefined);
   setConfigureState('selected', undefined);
   setConfigureState('selectedLeds', []);
@@ -286,6 +288,13 @@ export function deleteMacro(layer, macro) {
     updMacros[layer] = _.without(currLayer, macro);
     return updMacros;
   });
+}
+
+/**
+ * @param {number} preset
+ */
+export function setVisualPreset(preset) {
+  setConfigureState('preset', preset);
 }
 
 /**

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button } from '../../mui';
-import { VideoOutlineIcon, VideoOffOfflineIcon } from '../../icons';
+import { BrightnessLow, BrightnessHigh } from '../../icons';
 import { useCoreState, updatePanel, Panels } from '../../state/core';
 
 /** @type {import('../../theme').ThemedCssProperties} */
@@ -24,11 +24,11 @@ function ToggleVisualsButton(props) {
   return (
     <Button className={classes.button} onClick={toggle}>
       {isVisuals ? (
-        <VideoOffOfflineIcon className={classes.leftIcon} />
+        <BrightnessLow className={classes.leftIcon} />
       ) : (
-        <VideoOutlineIcon className={classes.leftIcon} />
+        <BrightnessHigh className={classes.leftIcon} />
       )}
-      {isVisuals ? 'Hide Visuals' : 'Show Visuals'}
+      {isVisuals ? 'Hide LEDs' : 'Show LEDs'}
     </Button>
   );
 }
