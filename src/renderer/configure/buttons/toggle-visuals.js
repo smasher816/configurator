@@ -23,11 +23,7 @@ function ToggleVisualsButton(props) {
 
   return (
     <Button className={classes.button} onClick={toggle}>
-      {isVisuals ? (
-        <BrightnessLow className={classes.leftIcon} />
-      ) : (
-        <BrightnessHigh className={classes.leftIcon} />
-      )}
+      {isVisuals ? <BrightnessLow className={classes.leftIcon} /> : <BrightnessHigh className={classes.leftIcon} />}
       {isVisuals ? 'Hide LEDs' : 'Show LEDs'}
     </Button>
   );

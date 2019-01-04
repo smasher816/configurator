@@ -11,7 +11,7 @@ import {
   deleteAnimation,
   updateAnimation,
   setSelectedAnimation,
-  setAnimationData,
+  setAnimationData
 } from '../../state/configure';
 import AnimationEditDialog from './animation-edit-dialog';
 
@@ -41,7 +41,7 @@ function AnimationList(props) {
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
 
   const startupCount = _.toPairs(animations).filter(([, x]) => {
-    console.log(x);
+    //console.log(x);
     return x.settings.includes('start');
   }).length;
 

@@ -135,7 +135,12 @@ function AnimationEdit(props) {
               ))}
             </Select>
           </FormControl>
-          <Button color="secondary" className={classes.actionButton} onClick={() => setShowRename(true)} disabled={active.length === 0}>
+          <Button
+            color="secondary"
+            className={classes.actionButton}
+            onClick={() => setShowRename(true)}
+            disabled={active.length === 0}
+          >
             Rename
           </Button>
         </div>
