@@ -7,7 +7,7 @@ import {
   addAnimation,
   updateAnimation,
   //renameAnimation,
-  setLedStatus
+  setAllLeds
 } from '../../state/configure';
 //import { AlterFieldModal } from '../../modal';
 import { SwatchedChromePicker } from '../../common';
@@ -98,12 +98,12 @@ function StaticMap(props) {
   const color = _.head(selectedLeds.map(x => ledStatus[x]).filter(x => !!x)) || { r: 0, g: 0, b: 0 };
   const colorChange = color => {
     const statuses = { ...ledStatus };
-
-    // TODO: Bulk update
     _.forEach(selectedLeds, x => {
       statuses[x] = { id: x, ...color.rgb };
-      setLedStatus(x, { id: x, ...color.rgb });
     });
+
+    setAllLeds(statuses);
+
     const animation =
       _.toPairs(statuses)
         .map(([id, x]) => `P[${id}](${x.r},${x.g},${x.b})`)

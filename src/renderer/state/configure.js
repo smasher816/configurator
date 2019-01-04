@@ -334,6 +334,13 @@ export function setLedStatus(id, status) {
 }
 
 /**
+ * @param {LedStatus} status
+ */
+export function setAllLeds(status) {
+  setConfigureState('ledStatus', status);
+}
+
+/**
  * @param {number} id
  */
 export function clearLedStatus(id) {
