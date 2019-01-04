@@ -1,3 +1,4 @@
+export { default as HelpButton } from './help';
 export { default as ToggleKeyboardButton } from './toggle-keyboard';
 export { default as ToggleVisualsButton } from './toggle-visuals';
 export { default as ImportKeymapButton } from './import-keymap';
