@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import electron from 'electron';
+import fs from 'fs';
 import PropTypes from 'prop-types';
 import { Button, IconButton } from '../../mui';
 import { JsonIcon } from '../../icons';
 import { tooltipped } from '../../utils';
 import { SimpleDataModal } from '../../modal';
-import { SuccessToast } from '../../toast';
+import { SuccessToast, ErrorToast } from '../../toast';
 import { popupToast } from '../../state/core';
 import { currentConfig } from '../../state/configure';
 
@@ -27,7 +28,36 @@ function ViewRawJsonButton(props) {
     popupToast(<SuccessToast message={<span>Copied to Clipoard</span>} onClose={() => popupToast(null)} />);
   };
 
-  const copyAction = <Button onClick={copyJson}>Copy</Button>;
+  const saveDialog = () => {
+    electron.remote.dialog.showSaveDialog(
+      {
+        defaultPath: 'configurator-export.json',
+        filters: [{ name: 'JSON', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] }]
+      },
+      filename => {
+        if (filename) {
+          fs.writeFile(filename, data, err => {
+            if (err) {
+              popupToast(
+                <ErrorToast message={<span>Error saving file: ${err.message}</span>} onClose={() => popupToast(null)} />
+              );
+            } else {
+              popupToast(<SuccessToast message={<span>Saved!</span>} onClose={() => popupToast(null)} />);
+            }
+          });
+        }
+      }
+    );
+  };
+
+  const actions = [
+    <Button onClick={copyJson} key="copy">
+      Copy
+    </Button>,
+    <Button onClick={saveDialog} key="save">
+      Save
+    </Button>
+  ];
 
   return (
     <div>
@@ -36,7 +66,7 @@ function ViewRawJsonButton(props) {
         open={!!data}
         onClose={() => setData(null)}
         data={data}
-        actions={[copyAction]}
+        actions={actions}
         title="Raw Configuration JSON"
       />
     </div>
