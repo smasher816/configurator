@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, Modal, Typography } from '../mui';
+import { withStyles, Button, Modal, Typography, TextField } from '../mui';
 import { fontStack } from '../theme';
 
 /** @type {import('../theme').ThemedCssProperties} */
@@ -56,15 +56,18 @@ function SimpleDataModal(props) {
     <Modal open={open} onClose={onClose} disableBackdropClick={!readonly} disableEscapeKeyDown={!readonly}>
       <div className={classes.paper}>
         <Typography variant="h6">{title}</Typography>
-        {readonly ? (
-          <div className={classes.dataContainer}>
-            <pre className={classes.data}>{data}</pre>
-          </div>
-        ) : (
-          <div className={classes.textContainer}>
-            <textarea onChange={e => onChange && onChange(e.target.value)} className={classes.text} value={data} />
-          </div>
-        )}
+        <div className={classes.dataContainer}>
+          <TextField
+            fullWidth
+            multiline
+            onChange={e => onChange && onChange(e.target.value)}
+            className={classes.data}
+            value={data}
+            inputProps={{ readOnly: readonly }}
+            autoFocus={true}
+            rows="40"
+          />
+        </div>
         <div className={classes.actions}>
           <div className={classes.spacer} />
           {actions && [...actions]}
