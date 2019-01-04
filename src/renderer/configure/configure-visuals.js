@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles, Button } from '../mui';
 import { CodeIcon, TuneIcon, VariableIcon, MagnifyIcon } from '../icons';
-import { AnimationIcon, SquareEditOutlineIcon, PaletteAdvancedIcon } from '../icons';
+import { AnimationIcon, PaletteAdvancedIcon } from '../icons';
 //import KeyInfo from './key-info';
 import CustomKll from './custom-kll';
 import AdvancedSettings from './advanced-settings';
@@ -11,7 +11,6 @@ import PresetSelect from './visuals-select';
 import VisualizeLeds from './visualize-leds';
 import SideTabs from './side-tabs';
 import AnimationList from './visuals/animation-list';
-import AnimationEdit from './visuals/animation-edit';
 import StaticMap from './visuals/static-map';
 import { LayerMacros } from './macros';
 import { tooltipped } from '../utils';
@@ -33,13 +32,8 @@ const tabs = [
   },
   {
     id: 'tab/customize-canned',
-    icon: tooltipped('Customize Prebuilt Animation', <PaletteAdvancedIcon fontSize="large" />),
+    icon: tooltipped('New Animation', <PaletteAdvancedIcon fontSize="large" />),
     tab: <CustomizeCanned />
-  },
-  {
-    id: 'tab/edit-animation',
-    icon: tooltipped('Add/Edit Animation', <SquareEditOutlineIcon fontSize="large" />),
-    tab: <AnimationEdit />
   },
   {
     id: 'tab/animations',

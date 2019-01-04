@@ -123,10 +123,10 @@ function CustomizeCanned(props) {
     <div className={classes.container}>
       {!edit && (
         <>
-          <Typography variant="subtitle1">Customize Prebuilt Animation</Typography>
+          <Typography variant="subtitle1">New Animation</Typography>
           <div className={classes.row}>
             <FormControl className={classes.animationSelect}>
-              <InputLabel htmlFor="animation">Animation</InputLabel>
+              <InputLabel htmlFor="animation">Type</InputLabel>
               <Select
                 value={active}
                 onChange={e => changeActive(e.target.value)}
@@ -147,7 +147,7 @@ function CustomizeCanned(props) {
       {!!active && !!data && (
         <div className={classes.customizations}>
           <div className={classes.row}>
-            <TextField
+            {!edit && <TextField
               autoFocus={true}
               value={data.name}
               onChange={e => update('name', e.target.value)}
@@ -155,7 +155,7 @@ function CustomizeCanned(props) {
               className={classes.animationName}
               helperText={error}
               error={!!error}
-            />
+            />}
             <Button color="primary" variant="contained" onClick={create} disabled={!!error}>
               {edit ? 'Update' : 'Create'}
             </Button>

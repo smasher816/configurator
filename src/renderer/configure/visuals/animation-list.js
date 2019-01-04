@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
-import { Table, TableHead, TableBody, TableCell, TableRow, IconButton, Typography, grey } from '../../mui';
-import { DeleteIcon, ToggleSwitchOutlineIcon, ToggleSwitchOffOutlineIcon } from '../../icons';
-import { useConfigureState, deleteAnimation, updateAnimation } from '../../state/configure';
+import { Button, Table, TableHead, TableBody, TableCell, TableRow, IconButton, Typography, grey } from '../../mui';
+import { EditIcon, DeleteIcon, ToggleSwitchOutlineIcon, ToggleSwitchOffOutlineIcon } from '../../icons';
+import { AlterFieldModal } from '../../modal';
+import {
+  useConfigureState,
+  addAnimation,
+  deleteAnimation,
+  updateAnimation,
+  setSelectedAnimation,
+  setAnimationData,
+} from '../../state/configure';
+import AnimationEditDialog from './animation-edit-dialog';
 
 /** @type {import('../../theme').CssProperties} */
 const styles = {
@@ -47,6 +56,37 @@ function AnimationList(props) {
     updateAnimation(name, { settings: settings.join(', ') });
   };
 
+  const [showNew, setShowNew] = useState(false);
+  const create = (save, name) => {
+    setShowNew(false);
+    if (save) {
+      addAnimation(name);
+      editAnimation(name);
+    }
+  };
+
+  const validateName = name => {
+    if (animations[name]) {
+      return 'An animation already exists with that name';
+    }
+    const rx = /^[A-Za-z_][A-Za-z0-9_]*$/;
+    if (!name.length || !rx.test(name)) {
+      return 'Invalid name - valid characters [A-Za-z0-9_] must not start with number';
+    }
+  };
+
+  const closeDialog = () => setAssignDialogOpen(false);
+  const editAnimation = name => {
+    if (animations[name].type == 'canned') {
+      let data = { name, ...animations[name].data };
+      setSelectedAnimation(data.can);
+      setAnimationData(data);
+    } else {
+      setSelectedAnimation(name);
+    }
+    setAssignDialogOpen(true);
+  };
+
   return (
     <div className={classes.container}>
       {startupCount > 1 && (
@@ -76,14 +116,35 @@ function AnimationList(props) {
                 </div>
               </TableCell>
               <TableCell>
+                <IconButton onClick={() => editAnimation(name)}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
                 <IconButton onClick={() => deleteAnimation(name)}>
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               </TableCell>
             </TableRow>
           ))}
+          <TableRow key={name}>
+            <TableCell />
+            <TableCell />
+            <TableCell>
+              <Button color="secondary" className={classes.actionButton} onClick={() => setShowNew(true)}>
+                Add New
+              </Button>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
+      <AlterFieldModal
+        open={showNew}
+        value={''}
+        name="Animation Name"
+        saveText="Create"
+        onClose={create}
+        validation={validateName}
+      />
+      <AnimationEditDialog open={assignDialogOpen} onClose={closeDialog} />
     </div>
   );
 }

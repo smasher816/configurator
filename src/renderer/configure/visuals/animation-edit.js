@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {
   useConfigureState,
-  addAnimation,
   updateAnimation,
   renameAnimation,
   setSelectedAnimation,
@@ -52,7 +51,6 @@ function AnimationEdit(props) {
   const [animations] = useConfigureState('animations');
   const [active, setActive] = useState(animation || '');
   const [showRename, setShowRename] = useState(false);
-  const [showNew, setShowNew] = useState(false);
 
   const activeAnimation = active.length && animations[active];
 
@@ -68,14 +66,6 @@ function AnimationEdit(props) {
 
   const rawAnimationChange = e => updateAnimation(active, { frames: e.target.value });
   const settingChange = e => updateAnimation(active, { settings: e.target.value });
-
-  const create = (save, name) => {
-    setShowNew(false);
-    if (save) {
-      addAnimation(name);
-      setActive(name);
-    }
-  };
 
   const rename = (save, name) => {
     setShowRename(false);
@@ -115,8 +105,7 @@ function AnimationEdit(props) {
           <TextField
             fullWidth
             multiline
-            rows="20"
-            rowsMax="20"
+            rows="35"
             label="Frames"
             InputProps={{ className: classes.text }}
             value={activeAnimation.frames || ''}
@@ -146,22 +135,11 @@ function AnimationEdit(props) {
               ))}
             </Select>
           </FormControl>
-          <Button className={classes.actionButton} onClick={() => setShowRename(true)} disabled={active.length === 0}>
+          <Button color="secondary" className={classes.actionButton} onClick={() => setShowRename(true)} disabled={active.length === 0}>
             Rename
-          </Button>
-          <Button color="secondary" className={classes.actionButton} onClick={() => setShowNew(true)}>
-            Add New
           </Button>
         </div>
         {!!activeAnimation && <>{animationDetails}</>}
-        <AlterFieldModal
-          open={showNew}
-          value={''}
-          name="Animation Name"
-          saveText="Create"
-          onClose={create}
-          validation={validateName}
-        />
         <AlterFieldModal
           open={showRename}
           value={active}
@@ -177,7 +155,7 @@ function AnimationEdit(props) {
 
 AnimationEdit.propTypes = {
   classes: PropTypes.object.isRequired,
-  animation: PropTypes.object
+  animation: PropTypes.string
 };
 
 export default withStyles(styles)(AnimationEdit);
