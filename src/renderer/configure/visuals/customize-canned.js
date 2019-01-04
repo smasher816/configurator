@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
-import { withStyles, Typography, FormControl, InputLabel, Select, MenuItem, TextField, Button } from '../../mui';
+import {
+  withStyles,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+  Switch
+} from '../../mui';
 import { useConfigureState } from '../../state/index';
 import { SwatchedChromePicker } from '../../common';
 import { framesToString, Injection } from '../../../common/config';
 import { process } from './canned';
 import log from 'loglevel';
-import { addAnimation, updateCustomKll, setSelectedAnimation, setAnimationData } from '../../state/configure';
+import {
+  addAnimation,
+  updateAnimation,
+  updateCustomKll,
+  setSelectedAnimation,
+  setAnimationData
+} from '../../state/configure';
 import { popupToast } from '../../state/core';
 import { SuccessToast } from '../../toast';
 
@@ -62,6 +79,7 @@ function CustomizeCanned(props) {
   const [active] = useConfigureState('selectedAnimation');
   /** @type {[Object, React.Dispatch<React.SetStateAction<Object>>]} */
   const [data] = useConfigureState('animationData');
+  const [autostart, setAutostart] = useState(true);
 
   const validateName = name => {
     const rx = /^[A-Za-z_][A-Za-z0-9_]*$/;
@@ -88,11 +106,22 @@ function CustomizeCanned(props) {
   const edit = !!animations[data.name];
 
   const create = () => {
-    const frames = can.frames.map(f => process(can.configurable, data, f, can.version));
-    const settings = process(can.configurable, data, can.settings, can.version);
     const name = data.name;
+    const frames = can.frames.map(f => process(can.configurable, data, f, can.version));
+    let settings = process(can.configurable, data, can.settings, can.version);
 
-		//delete data['name'];
+    if (autostart) {
+      settings = [...settings, 'start'];
+
+      // Remove all other animations
+      _.toPairs(animations)
+        .filter(([, x]) => x.settings.includes('start'))
+        .forEach(([name, anim]) => {
+          let settings = anim.settings.split(',').map(x => x.trim());
+          settings = _.filter(settings, x => x !== 'start');
+          updateAnimation(name, { settings: settings.join(', ') });
+        });
+    }
 
     /** @type {Partial<import('../../../common/config/types').ConfigAnimation>} */
     const animation = {
@@ -113,10 +142,10 @@ function CustomizeCanned(props) {
     }
 
     if (!edit) {
-      setSelectedAnimation('');
-      setAnimationData({});
       popupToast(<SuccessToast message={`Successfully added animation '${name}'`} onClose={() => popupToast(null)} />);
     }
+    setSelectedAnimation('');
+    setAnimationData({});
   };
 
   return (
@@ -147,18 +176,30 @@ function CustomizeCanned(props) {
       {!!active && !!data && (
         <div className={classes.customizations}>
           <div className={classes.row}>
-            {!edit && <TextField
-              autoFocus={true}
-              value={data.name}
-              onChange={e => update('name', e.target.value)}
-              label="Name to create as"
-              className={classes.animationName}
-              helperText={error}
-              error={!!error}
-            />}
-            <Button color="primary" variant="contained" onClick={create} disabled={!!error}>
-              {edit ? 'Update' : 'Create'}
-            </Button>
+            {!edit && (
+              <>
+                <TextField
+                  autoFocus={true}
+                  value={data.name}
+                  onChange={e => update('name', e.target.value)}
+                  label="Name to create as"
+                  className={classes.animationName}
+                  helperText={error}
+                  error={!!error}
+                />
+                <Button color="primary" variant="contained" onClick={create} disabled={!!error}>
+                  {edit ? 'Update' : 'Create'}
+                </Button>
+              </>
+            )}
+          </div>
+          <div className={classes.row}>
+            <FormControl>
+              <FormControlLabel
+                control={<Switch checked={autostart} onChange={(_, checked) => setAutostart(checked)} />}
+                label="Start Automatically"
+              />
+            </FormControl>
           </div>
           {can.configurable.map(item => (
             <div className={classNames(classes.row, 'centered')} key={item.name}>

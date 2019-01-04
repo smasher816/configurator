@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '../../mui';
+import { withStyles, Button, Typography } from '../../mui';
 import { Palette, getLayerFg } from '../styles';
 import { getSize } from '../../../common/config';
 import {
