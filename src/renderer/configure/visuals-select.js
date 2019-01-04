@@ -22,13 +22,13 @@ const styles = {
       cursor: 'pointer',
       display: 'block',
       float: 'left',
-      backgroundColor: Palette.lightgray,
+      backgroundColor: Palette.silver,
       height: `${tabHeight}px`,
       lineHeight: `${tabHeight}px`,
       padding: '0 10px',
       marginRight: '5px',
       border: '1px solid',
-      borderBottomColor: Palette.lightgray,
+      borderBottomColor: Palette.silver,
       borderRadius: '4px 4px 0 0',
       minWidth: '4.25em',
       marginBottom: '-1px'
@@ -50,7 +50,7 @@ const styles = {
 function PresetSelect(props) {
   const { classes } = props;
   const [preset, setPreset] = useConfigureState('preset');
-  const presets = [1, 2, 3, 4, 5, 6, 7];
+  const presets = [0, 1, 2, 3, 4, 5, 6, 7];
 
   return (
     <ul className={classes.navTabs} style={{ borderColor: getLayerFg(preset) }}>
@@ -61,7 +61,7 @@ function PresetSelect(props) {
           style={{ color: getLayerFg(i) }}
           onClick={() => setPreset(i)}
         >
-          <span>{`Preset ${i}`}</span>
+          <span>{i === 0 ? 'Default' : `Preset ${i}`}</span>
         </li>
       ))}
     </ul>

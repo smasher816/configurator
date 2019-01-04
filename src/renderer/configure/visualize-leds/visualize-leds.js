@@ -8,10 +8,12 @@ import {
   setConfigureState,
   addSelectedLeds,
   setSelectedLeds,
-  setLedStatus
+  setLedStatus,
+  updateAnimation
 } from '../../state/configure';
 import Key from './key';
 import Led from './led';
+import _ from 'lodash';
 // TODO: Major refactor, this is ugly right now, but it works...
 
 /** @type {import('../../theme').CssProperties} */
@@ -186,6 +188,11 @@ function VisualizeLeds(props) {
   const active = 'preset' + preset;
   const activeAnimation = active.length && animations[active];
 
+  const filteredAnimations = _.toPairs(animations).filter(
+    ([, x]) => x.type !== 'static' && x.settings.includes('start')
+  );
+  const disabled = preset == 0 && filteredAnimations.length > 0;
+
   /** @type {(e: React.MouseEvent, led: import('../../../common/config/types').ConfigLed) => void} */
   const click = (e, led) => {
     //TODO: only select when needed
@@ -280,7 +287,27 @@ function VisualizeLeds(props) {
     position: 'relative',
     height,
     width,
-    padding: ui.backdropPadding
+    padding: ui.backdropPadding,
+    backgroundColor: '#DDDDDD'
+  };
+
+  const overlayStyle = {
+    position: 'relative',
+    margin: 'auto',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: '#555',
+    width: 300,
+    zIndex: 3,
+    padding: 10
+  };
+
+  const disableLiveAnimations = () => {
+    filteredAnimations.forEach(([name, anim]) => {
+      let settings = anim.settings.split(',').map(x => x.trim());
+      settings = _.filter(settings, x => x !== 'start');
+      updateAnimation(name, { settings: settings.join(', ') });
+    });
   };
 
   return (
@@ -289,16 +316,30 @@ function VisualizeLeds(props) {
         {matrix.map(k => (
           <Key key={`key-${k.board}-${k.code}`} keydef={k} sizeFactor={ui.sizeFactor} />
         ))}
-        {leds.map(led => (
-          <Led
-            key={`led-${led.id}`}
-            led={led}
-            sizeFactor={ui.sizeFactor}
-            onClick={click}
-            selected={selectedLeds.includes(led.id)}
-            status={ledStatus[led.id]}
-          />
-        ))}
+        {!disabled &&
+          leds.map(led => (
+            <Led
+              key={`led-${led.id}`}
+              led={led}
+              sizeFactor={ui.sizeFactor}
+              onClick={click}
+              selected={selectedLeds.includes(led.id)}
+              status={ledStatus[led.id]}
+            />
+          ))}
+        {disabled && (
+          <div style={overlayStyle}>
+            <Typography color="inherit" variant="h6">
+              Animations Enabled.
+            </Typography>
+            <Typography color="inherit" variant="subtitle1">
+              Unable to change individual key colors.
+            </Typography>
+            <Button variant="contained" onClick={disableLiveAnimations}>
+              Turn off
+            </Button>
+          </div>
+        )}
         {state.zone && <div className={classes.zone} style={state.zone} />}
       </div>
     </div>

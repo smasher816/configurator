@@ -38,7 +38,7 @@ const initialState = {
   loading: false,
   layout: undefined,
   layer: 0,
-  preset: 1,
+  preset: 0,
   raw: undefined,
   headers: undefined,
   matrix: undefined,
@@ -71,7 +71,7 @@ export { useConfigureState, setConfigureState };
 
 export function reset() {
   setConfigureState('layer', 0);
-  setConfigureState('preset', 1);
+  setConfigureState('preset', 0);
   setConfigureState('layout', undefined);
   setConfigureState('selected', undefined);
   setConfigureState('selectedLeds', []);

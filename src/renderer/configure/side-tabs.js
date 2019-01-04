@@ -63,26 +63,28 @@ function SideTabs(props) {
   return (
     <div>
       <div className={classes.tabContainer}>
-        {items && items.map(t => (
-          <div
-            key={t.id}
-            className={classNames(classes.tab, activeTab === t.id ? classes.active : classes.inactive)}
-            onClick={() => setActiveTab(t.id)}
-          >
-            {t.icon}
-          </div>
-        ))}
+        {items &&
+          items.map(t => (
+            <div
+              key={t.id}
+              className={classNames(classes.tab, activeTab === t.id ? classes.active : classes.inactive)}
+              onClick={() => setActiveTab(t.id)}
+            >
+              {t.icon}
+            </div>
+          ))}
       </div>
       <div className={classes.tabContainerRight}>
-        {itemsRight && itemsRight.map(t => (
-          <div
-            key={t.id}
-            className={classNames(classes.tabRight, activeTab === t.id ? classes.activeRight : classes.inactive)}
-            onClick={() => setActiveTab(t.id)}
-          >
-            {t.icon}
-          </div>
-        ))}
+        {itemsRight &&
+          itemsRight.map(t => (
+            <div
+              key={t.id}
+              className={classNames(classes.tabRight, activeTab === t.id ? classes.activeRight : classes.inactive)}
+              onClick={() => setActiveTab(t.id)}
+            >
+              {t.icon}
+            </div>
+          ))}
       </div>
       <div style={{ width: width + 2 + 2 * ui.backdropPadding, marginTop: 15 }}>
         <div

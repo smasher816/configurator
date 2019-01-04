@@ -38,6 +38,7 @@ const styles = {
 function AnimationList(props) {
   const { classes } = props;
   const [animations] = useConfigureState('animations');
+  const [assignDialogOpen, setAssignDialogOpen] = useState(false);
 
   const startupCount = _.toPairs(animations).filter(([, x]) => {
     console.log(x);
