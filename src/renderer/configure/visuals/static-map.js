@@ -104,15 +104,17 @@ function StaticMap(props) {
 
     setAllLeds(statuses);
 
-    const animation =
-      _.toPairs(statuses)
-        .map(([id, x]) => `P[${id}](${x.r},${x.g},${x.b})`)
-        .join(',\n') + ';';
-
     if (!activeAnimation) {
       addAnimation(active, 'static');
       updateAnimation(active, { settings, frames: header });
     }
+  };
+
+  const colorChangeComplete = () => {
+    const animation =
+      _.toPairs(ledStatus)
+        .map(([id, x]) => `P[${id}](${x.r},${x.g},${x.b})`)
+        .join(',\n') + ';';
     updateAnimation(active, { frames: `${header}${animation}` });
   };
 
@@ -169,7 +171,7 @@ function StaticMap(props) {
               <Typography variant="subtitle1" className={classes.label}>
                 Current Color:
               </Typography>
-              <SwatchedChromePicker color={color} onChange={colorChange} />
+              <SwatchedChromePicker color={color} onChange={colorChange} onChangeComplete={colorChangeComplete} />
             </div>
           )}
         </div>

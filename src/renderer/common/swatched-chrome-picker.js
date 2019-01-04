@@ -44,7 +44,7 @@ const styles = theme => ({
 });
 
 function SwatchedChromePicker(props) {
-  const { classes, color, onChange, disabled } = props;
+  const { classes, color, onChange, onChangeComplete, disabled } = props;
   const [showPicker, setShowPicker] = useState(false);
 
   const cb = contrastRatio(color, black);
@@ -76,7 +76,7 @@ function SwatchedChromePicker(props) {
       {showPicker && (
         <div className={classes.popup}>
           <div className={classes.cover} onClick={() => setShowPicker(false)} />
-          <ChromePicker disableAlpha={true} color={color} onChange={onChange} />
+          <ChromePicker disableAlpha={true} color={color} onChange={onChange} onChangeComplete={onChangeComplete} />
         </div>
       )}
     </div>
@@ -86,7 +86,8 @@ function SwatchedChromePicker(props) {
 SwatchedChromePicker.propTypes = {
   classes: PropTypes.object.isRequired,
   color: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onChangeComplete: PropTypes.func,
   disabled: PropTypes.bool
 };
 
