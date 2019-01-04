@@ -39,7 +39,7 @@ function Settings(props) {
 
   return (
     <Paper square className={classes.root}>
-      <Tabs fullWidth value={index} onChange={(_, value) => setIndex(value)}>
+      <Tabs variant="fullWidth" value={index} onChange={(_, value) => setIndex(value)}>
         <Tab label="Preferences" icon={<AccountSettingsIcon />} />
         {/* <Tab label="Animations" icon={<MovieRollIcon />} />
         <Tab label="Downloads" icon={<FolderDownloadIcon />} /> */}
