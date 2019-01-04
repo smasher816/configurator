@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography } from '../../mui';
+import { withStyles, Button, Typography } from '../../mui';
 import {
   useConfigureState,
   //setConfigureState,
@@ -95,7 +95,7 @@ function StaticMap(props) {
     }
   };*/
 
-  const color = _.head(selectedLeds.map(x => ledStatus[x]).filter(x => !!x)) || { r: 0, g: 0, b: 0 };
+  const color = _.head(selectedLeds.map(x => ledStatus[x]).filter(x => !!x));
   const colorChange = color => {
     const statuses = { ...ledStatus };
     _.forEach(selectedLeds, x => {
@@ -110,12 +110,22 @@ function StaticMap(props) {
     }
   };
 
-  const colorChangeComplete = () => {
+  const saveAnimation = () => {
     const animation =
       _.toPairs(ledStatus)
         .map(([id, x]) => `P[${id}](${x.r},${x.g},${x.b})`)
         .join(',\n') + ';';
     updateAnimation(active, { frames: `${header}${animation}` });
+  };
+
+  const clearLeds = () => {
+    const statuses = { ...ledStatus };
+    _.forEach(selectedLeds, x => {
+      delete statuses[x];
+    });
+
+    setAllLeds(statuses);
+    saveAnimation();
   };
 
   /*
@@ -171,10 +181,19 @@ function StaticMap(props) {
               <Typography variant="subtitle1" className={classes.label}>
                 Current Color:
               </Typography>
-              <SwatchedChromePicker color={color} onChange={colorChange} onChangeComplete={colorChangeComplete} />
+              <SwatchedChromePicker color={color} onChange={colorChange} onChangeComplete={saveAnimation} />
             </div>
           )}
         </div>
+        {color && (
+          <div className={classes.row}>
+            <div className={classes.centeredRow}>
+              <Button variant="outlined" onClick={clearLeds}>
+                Clear
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </form>
   );

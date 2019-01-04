@@ -47,13 +47,14 @@ function SwatchedChromePicker(props) {
   const { classes, color, onChange, onChangeComplete, disabled } = props;
   const [showPicker, setShowPicker] = useState(false);
 
-  const cb = contrastRatio(color, black);
-  const cw = contrastRatio(color, white);
+  const colorPreview = color || { r: 255, g: 255, b: 255 };
+  const cb = contrastRatio(colorPreview, black);
+  const cw = contrastRatio(colorPreview, white);
 
   const text = cb > cw ? black : white;
 
   const swatchStyle = {
-    background: `rgb(${color.r}, ${color.g}, ${color.b})`,
+    background: color ? `rgb(${color.r}, ${color.g}, ${color.b})` : 'transparent',
     borderRadius: showPicker ? '10px 10px 0 0' : 10
   };
 
@@ -70,13 +71,19 @@ function SwatchedChromePicker(props) {
         onClick={() => setShowPicker(!showPicker)}
       >
         <div style={swatchStyle} className={classes.color}>
-          <Typography style={textStyle}>#{toHex(color.r) + toHex(color.g) + toHex(color.b)}</Typography>
+          {!color && <Typography style={textStyle}>Unset</Typography>}
+          {color && <Typography style={textStyle}>#{toHex(color.r) + toHex(color.g) + toHex(color.b)}</Typography>}
         </div>
       </div>
       {showPicker && (
         <div className={classes.popup}>
           <div className={classes.cover} onClick={() => setShowPicker(false)} />
-          <ChromePicker disableAlpha={true} color={color} onChange={onChange} onChangeComplete={onChangeComplete} />
+          <ChromePicker
+            disableAlpha={true}
+            color={colorPreview}
+            onChange={onChange}
+            onChangeComplete={onChangeComplete}
+          />
         </div>
       )}
     </div>
@@ -85,7 +92,7 @@ function SwatchedChromePicker(props) {
 
 SwatchedChromePicker.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.object.isRequired,
+  color: PropTypes.object,
   onChange: PropTypes.func,
   onChangeComplete: PropTypes.func,
   disabled: PropTypes.bool
