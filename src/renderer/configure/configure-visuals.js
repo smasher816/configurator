@@ -18,6 +18,7 @@ import { useConfigureState, useCoreState } from '../state';
 import { setSelectedLeds } from '../state/configure';
 import { ToggleVisualsButton, CompileFirmwareButton } from './buttons';
 import CustomizeCanned from './visuals/customize-canned';
+import _ from 'lodash';
 
 const tabs = [
   {
@@ -76,22 +77,31 @@ function ConfigureVisuals(props) {
   const [keyboard] = useCoreState('keyboard');
   const [keyboardHidden] = useConfigureState('keyboardHidden');
   const [leds] = useConfigureState('leds');
+  const [selectedLeds] = useConfigureState('selectedLeds');
 
-  const select = selection => {
+  const ledGroups = _.get(keyboard, 'keyboard.ledGroups', []);
+
+  const select = (selection, append) => {
+    let area = [];
     switch (selection) {
       case 'none':
-        setSelectedLeds([]);
+        area = [];
         break;
       case 'backlighting':
-        setSelectedLeds(leds.filter(x => !!x.scanCode).map(x => x.id));
+        area = leds.filter(x => !!x.scanCode).map(x => x.id);
         break;
       case 'underlighting':
-        setSelectedLeds(leds.filter(x => !x.scanCode).map(x => x.id));
+        area = leds.filter(x => !x.scanCode).map(x => x.id);
         break;
       case 'all':
-        setSelectedLeds(leds.map(x => x.id));
+        area = leds.map(x => x.id);
+        break;
+      default:
+        area = leds.filter(x => ledGroups[selection].includes(x.id)).map(x => x.id);
         break;
     }
+
+    setSelectedLeds(append ? [...selectedLeds, ...area] : area);
   };
 
   return (
@@ -103,18 +113,27 @@ function ConfigureVisuals(props) {
           <PresetSelect />
           <VisualizeLeds />
           <div className={classes.row} style={{ alignItems: 'center' }}>
-            <Button color="primary" onClick={() => select('backlighting')}>
-              Backlighting
-            </Button>
-            <Button color="primary" onClick={() => select('underlighting')}>
-              Underlighting
-            </Button>
-            <Button color="primary" onClick={() => select('all')}>
-              All
-            </Button>
-            <Button color="primary" onClick={() => select('none')}>
-              None
-            </Button>
+            <div style={{ float: 'left' }}>
+              <Button color="primary" onClick={e => select('backlighting', e.shiftKey)}>
+                Backlighting
+              </Button>
+              <Button color="primary" onClick={e => select('underlighting', e.shiftKey)}>
+                Underlighting
+              </Button>
+              <Button color="primary" onClick={e => select('all', e.shiftKey)}>
+                All
+              </Button>
+              <Button color="primary" onClick={e => select('none', e.shiftKey)}>
+                None
+              </Button>
+            </div>
+            <div style={{ float: 'right' }}>
+              {Object.keys(ledGroups).map(group => (
+                <Button color="primary" onClick={e => select(group, e.shiftKey)} key={group}>
+                  {group}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
