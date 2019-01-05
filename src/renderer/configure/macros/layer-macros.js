@@ -104,7 +104,6 @@ function LayerMacros(props) {
         </Card>
       ))}
       <div className={classes.actions}>
-        <div style={{ flex: '1' }} />
         <Fab color="secondary" className={classes.fab} onClick={() => addMacro(layer)}>
           <AddIcon />
         </Fab>
