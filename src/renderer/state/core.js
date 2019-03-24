@@ -33,7 +33,8 @@ const initialState = {
   keyboard: undefined,
   variant: undefined,
   toast: undefined,
-  toolbarButtons: undefined
+  toolbarButtons: undefined,
+  hidio: undefined
 };
 
 const { useSharedState: useCoreState, setSharedState: setCoreState } = createSharedState(initialState);
@@ -45,6 +46,7 @@ export function reset() {
   setCoreState('keyboard', undefined);
   setCoreState('variant', undefined);
   setCoreState('toast', undefined);
+  setCoreState('hidio', undefined);
 }
 
 /**
@@ -114,4 +116,13 @@ export function previousPanel() {
 
 export function toggleLoading() {
   setCoreState('loading', curr => !curr);
+}
+
+export function setHidio(hidio) {
+  setCoreState('hidio', curr => {
+    if (curr) {
+      curr.close();
+    }
+    return hidio;
+  });
 }

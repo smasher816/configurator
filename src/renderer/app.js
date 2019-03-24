@@ -4,10 +4,11 @@ import theme from './theme';
 import { checkVersion } from './state';
 import AppLayout from './app-layout';
 import { loadFromDb, updateDfu, updateKiidrv } from './state/settings';
-import { popupToast } from './state/core';
+import { useCoreState, popupToast, setHidio } from './state/core';
 import NewVersionToast from './toast/new-version';
 import { checkDfuVersion, checkKiidrvVersion } from './local-storage/utilities';
 import { GenericToast } from './toast';
+import { hidioConnect } from './hidio';
 
 async function initApp() {
   await loadFromDb();
@@ -39,6 +40,8 @@ async function initApp() {
       />
     );
   }
+
+  setHidio(await hidioConnect());
 }
 
 function App() {
