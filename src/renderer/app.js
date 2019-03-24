@@ -8,7 +8,7 @@ import { useCoreState, popupToast, setHidio } from './state/core';
 import NewVersionToast from './toast/new-version';
 import { checkDfuVersion, checkKiidrvVersion } from './local-storage/utilities';
 import { GenericToast } from './toast';
-import { hidioConnect } from './hidio';
+import { hidioConnect, getNodes } from './hidio';
 
 async function initApp() {
   await loadFromDb();
@@ -48,6 +48,18 @@ function App() {
   useEffect(() => {
     initApp();
   }, []);
+
+  const [hidio] = useCoreState('hidio');
+
+  if (hidio) {
+    console.log(hidio);
+    let n = getNodes(hidio.instance);
+    console.log(n);
+    n.then(nodes => {
+      console.log('f');
+      console.log(nodes);
+    });
+  }
 
   return (
     <MuiThemeProvider theme={theme}>
