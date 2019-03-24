@@ -7,13 +7,16 @@ import _ from 'lodash';
 import { useConnectedKeyboards } from '../hooks';
 import { withStyles, deepOrange, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '../mui';
 import { FolderOpen, HelpOutlineIcon } from '../icons';
-import { updateToolbarButtons, previousPanel, popupToast } from '../state/core';
+import { useCoreState, updateToolbarButtons, previousPanel, popupToast } from '../state/core';
 import { useSettingsState, updateDfu } from '../state/settings';
 import { BackButton, SettingsButton, HomeButton, HelpButton } from '../buttons';
 import { SuccessToast, ErrorToast } from '../toast';
 import { pathToImg } from '../common';
+import { getNodes, registerNode, sendCmd, getSignal } from '../hidio';
 
 //TODO: Split this up.
+//const hidioConnection = hidioConnect();
+//const hidioConnection = null;
 
 /** @type {import('../theme').ThemedCssProperties} */
 const styles = theme => ({
@@ -61,7 +64,10 @@ function Flash(props) {
   const [binPath, setBinPath] = useState(bin);
   const [progress, setProgress] = useState('');
   const [showResetHelp, setShowResetHelp] = useState(false);
+  //const [getHidio] = useState(hidioConnection);
   const progressTextBox = useRef(null);
+  const [hidio] = useCoreState('hidio');
+  //const [nodes, setNodes] = useState(null);
 
   useEffect(() => {
     updateToolbarButtons(
@@ -73,6 +79,20 @@ function Flash(props) {
       </>
     );
   }, []);
+
+  //useEffect(() => {
+  if (hidio) {
+    console.log(hidio);
+    let n = getNodes(hidio.instance);
+    console.log(n);
+    n.then(nodes => {
+      console.log('f');
+      console.log(nodes);
+      //setNodes(nodes);
+    });
+  }
+  //}, []);
+  //console.log(nodes);
 
   useLayoutEffect(updateScroll, [progress]);
 
@@ -187,6 +207,11 @@ function Flash(props) {
               Flash
             </Button>
           </Grid>
+          <Grid item xs={2} className={classes.buttonGrid}>
+            <Button variant="contained" color="primary" className={classes.button} onClick={version}>
+              Version
+            </Button>
+          </Grid>
         </Grid>
         <Grid container item xs={12} direction="row" justify="space-between" alignItems="center">
           <Grid item xs>
@@ -281,6 +306,62 @@ function Flash(props) {
     cmd.on('error', function() {
       // catch error so close still gets called
     });
+  }
+
+  function version() {
+    console.log('VERSION');
+    //setProgress('VERSION');
+
+    //hidioTest();
+    //getHidio.then(hidio => {
+    //hidioConnection.then(hidio => {
+    //hidioConnect().then(hidio => {
+    /*console.log('q');
+    console.log(hidio);
+    let n = getNodes(hidio);
+    console.log(n);
+    n.then(nodes => {
+      console.log('f');
+      console.log(nodes);
+    });*/
+    //});
+
+    _version();
+  }
+
+  async function _version() {
+    console.log('A');
+    //var hidio = await hidioConnection;
+    console.log(hidio);
+    console.log('B');
+    var p = getNodes(hidio.instance);
+    console.log(p);
+    var nodes = await p;
+    console.log('C');
+    console.log(nodes);
+    var node = await registerNode(nodes[0]);
+    console.log('D');
+    console.log(node);
+
+    await sendCmd(node, 'version');
+    console.log('SENT');
+    //while (hidio) {
+    console.log('loop');
+    await getSignal(hidio)
+      .then(s => {
+        console.log('SIGNAL');
+        setProgress(curr => curr + s);
+      })
+      .catch(e => {
+        if (e == 'Error: RpcSystem was destroyed.' || e == 'Error: Peer disconnected.') {
+          //hidio = null;
+        } else if (e == 'Error: remote exception: No data') {
+          // ignore
+        } else {
+          console.log(e);
+        }
+      });
+    //}
   }
 }
 
