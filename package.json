@@ -1,7 +1,7 @@
 {
-  "name": "kiibohd-configurator",
+  "name": "hexgears-configurator",
   "version": "1.0.2",
-  "description": "Configuration utility for Input Club keyboards",
+  "description": "Configuration utility for Hexgear keyboards",
   "author": "Jeremy Bondeson <jbondeson@gmail.com> (https://input.club)",
   "license": "GPL-3.0",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiibohd/configurator"
+    "url": "https://github.com/hexgears/configurator"
   },
   "electronWebpack": {
     "title": true,
@@ -71,8 +71,8 @@
   "build": {
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "buildDependenciesFromSource": true,
-    "productName": "Kiibohd Configurator",
-    "appId": "club.input.KiibohdConfigurator",
+    "productName": "Hexgears Configurator",
+    "appId": "com.hexgears.Configurator",
     "asar": true,
     "nodeGypRebuild": false,
     "npmRebuild": true,
@@ -96,8 +96,8 @@
         "AppImage",
         "tar.gz"
       ],
-      "executableName": "kiibohd-configurator",
-      "vendor": "Input Club",
+      "executableName": "hexgears-configurator",
+      "vendor": "Hexgears",
       "category": "Utility"
     },
     "directories": {

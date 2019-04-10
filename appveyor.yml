@@ -1,11 +1,11 @@
-# appveyor integration for kiibohd/configurator
+# appveyor integration for hexgears/configurator
 
 image: Visual Studio 2015
 
 
 # Environment Variables
 environment:
-  PACKAGE_NAME: kiibohd-configurator
+  PACKAGE_NAME: hexgears-configurator
   GH_TOKEN:
       secure: vsCcKfR71BF5WWBmtzNzowpU96iPjuF3cD7yBdEySG0ku2svWAJRgdSj9je/He35
   matrix:

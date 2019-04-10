@@ -1,4 +1,4 @@
-# The Kiibohd Configurator
+# The Hexgears Configurator
 
 Client Side Configuration & Flashing Software for Kiibohd compatible keyboards.
 
@@ -52,19 +52,13 @@ You will need to install Zadig drivers (automated through the `Settings > Driver
 
 ## Installation
 
-Download the installer/binary for your platform from the [latest release](https://github.com/kiibohd/configurator/releases/latest)
-
-## Arch Linux
-There is an Arch linux package:
-```bash
-yay -Syu kiibohd-configurator-git
-```
+Download the installer/binary for your platform from the [latest release](https://github.com/Hexgears/configurator/releases/latest)
 
 ## Compilation
 
 Only required if there is no release for your distribution.
 
-NOTE: If you run `yarn dev` you will also need to run [KiiConf](https://github.com/kiibohd/KiiConf) locally.
+NOTE: If you run `yarn dev` you will also need to run [KiiSrv](https://github.com/kiibohd/KiiSrv) locally.
 
 
 ### Requirements
@@ -81,7 +75,7 @@ NOTE: If you run `yarn dev` you will also need to run [KiiConf](https://github.c
 yarn
 yarn dist:dir
 cd output/linux-unpacked
-./kiibohd-configurator
+./hexgears-configurator
 ```
 
 ### macOS
@@ -91,7 +85,7 @@ cd output/linux-unpacked
 yarn
 yarn dist:dir
 cd output/mac
-open -a Kiibohd\ Configurator.app
+open -a Hexgears\ Configurator.app
 ```
 
 
@@ -109,5 +103,5 @@ choco install python python2 nodejs yarn
 yarn
 yarn dist:dir
 cd output/win-unpacked
-"Kiibohd Configurator.exe"
+"Hexgears Configurator.exe"
 ```

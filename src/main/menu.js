@@ -40,13 +40,13 @@ const template = [
       {
         label: 'Learn More',
         click() {
-          require('electron').shell.openExternal('https://github.com/kiibohd/configurator');
+          require('electron').shell.openExternal('https://github.com/hexgears/configurator');
         }
       },
       {
         label: 'Documentation',
         click() {
-          require('electron').shell.openExternal('https://github.com/kiibohd/configurator#readme');
+          require('electron').shell.openExternal('https://github.com/hexgears/configurator#readme');
         }
       },
       {
@@ -58,7 +58,7 @@ const template = [
       {
         label: 'Search Issues',
         click() {
-          require('electron').shell.openExternal('https://github.com/kiibohd/configurator/issues');
+          require('electron').shell.openExternal('https://github.com/hexgears/configurator/issues');
         }
       }
     ]

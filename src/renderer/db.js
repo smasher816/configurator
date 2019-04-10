@@ -1,13 +1,13 @@
 import localforage from 'localforage';
 
 const coreStore = localforage.createInstance({
-  name: 'kiibohd-configurator',
-  storeName: 'kiibohd-configurator'
+  name: 'hexgears-configurator',
+  storeName: 'hexgears-configurator'
 });
 
 const dlStore = localforage.createInstance({
-  name: 'kiibohd-configurator-downloads',
-  storeName: 'kiibohd-configurator-downloads'
+  name: 'hexgears-configurator-downloads',
+  storeName: 'hexgears-configurator-downloads'
 });
 
 /**

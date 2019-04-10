@@ -84,7 +84,7 @@ export async function checkVersion() {
     return;
   }
 
-  const uri = 'https://api.github.com/repos/kiibohd/configurator/releases/latest';
+  const uri = 'https://api.github.com/repos/hexgears/configurator/releases/latest';
   const response = await fetch(uri, {
     method: 'GET',
     headers: {
