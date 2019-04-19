@@ -8,8 +8,7 @@ import {
   ToggleVisualsButton,
   ViewRawJsonButton,
   ImportKeymapButton,
-  LayoutHistoryButton,
-  VersionSelectButton
+  LayoutHistoryButton
 } from './buttons';
 import ConfigureKeys from './configure-keys';
 import ConfigureVisuals from './configure-visuals';
@@ -35,7 +34,6 @@ function Configure(props) {
       updateToolbarButtons(
         <>
           <LayoutHistoryButton disabled={compiling} />
-          <VersionSelectButton disabled={compiling} />
           {keyboard.keyboard.visuals && <ToggleVisualsButton />}
           <ToggleKeyboardButton />
           <ViewRawJsonButton disabled={compiling} />
