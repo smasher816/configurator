@@ -28,6 +28,8 @@ export async function loadDefaultConfig(keyboard, variant) {
   const recentDls = _currentState('recentDls');
   const recent = _.head(recentDls[`${keyboard.keyboard.display}__${variant}`] || []);
 
+  if (!keyboard.keyboard.programmable) return {};
+
   if (recent && fs.existsSync(recent.json)) {
     return loadLocalConfig(recent.json);
   }
