@@ -1,0 +1,71 @@
+name: Electron Release
+
+on:
+  repository_dispatch:
+  release:
+    types: [created, unpublished, prereleased]
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Install libudev
+      run: sudo apt-get install -y libudev-dev
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 10.16
+    - name: Install project dependencies
+      run: |
+        yarn
+        yarn rebuild-deps
+    - name: Build and deploy app
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: yarn dist --publish always
+
+  build_mac:
+    runs-on: macOS-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Setup node env
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.16
+    - name: Install project dependencies
+      run: |
+        yarn
+        yarn rebuild-deps
+    - name: Build and deploy app
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: yarn dist --publish always
+
+  build_windows:
+    runs-on: windows-2016
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Setup node env
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.16
+    - name: Install project dependencies
+      run: |
+        yarn
+        yarn rebuild-deps
+    - name: Build and deploy app
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: yarn dist --x64 --publish always

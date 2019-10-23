@@ -2,8 +2,7 @@
 
 Client Side Configuration & Flashing Software for Kiibohd compatible keyboards.
 
-[![Travis Status](https://travis-ci.org/kiibohd/configurator.svg?branch=master)](https://travis-ci.org/kiibohd/configurator) [![Appveyor Status](https://ci.appveyor.com/api/projects/status/keu6at9jdrlvd1g5/branch/master?svg=true)](https://ci.appveyor.com/project/kiibohd/configurator/branch/master)
-
+[![Github Actions Status](https://github.com/hexgears/configurator/workflows/Electron%20Release/badge.svg)](https://github.com/hexgears/configurator/actions)
 
 [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.freenode.net/input.club.png)](https://kiwiirc.com/client/irc.freenode.net/#input.club)
 
