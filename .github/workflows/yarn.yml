@@ -29,16 +29,6 @@ jobs:
         yarn rebuild-deps
     - name: Compile project
       run: yarn dist --linux
-    - name: Attach builder config
-      uses: actions/upload-artifact@master
-      with:
-        name: builder-effective-config.yaml
-        path: output/builder-effective-config.yaml
-    - name: Attach linux config
-      uses: actions/upload-artifact@master
-      with:
-        name: latest-linux.yml
-        path: output/latest-linux.yml
     - name: Create release
       id: create_release
       uses: actions/create-release@master
@@ -86,11 +76,6 @@ jobs:
         yarn rebuild-deps
     - name: Compile project
       run: yarn dist --mac
-    - name: Attach builder config
-      uses: actions/upload-artifact@master
-      with:
-        name: builder-effective-config.yaml
-        path: output/builder-effective-config.yaml
     - name: Create release
       id: create_release
       uses: actions/create-release@master
@@ -140,11 +125,6 @@ jobs:
       run: |
         yarn dist
         yarn dist --win --x64
-    - name: Attach builder config
-      uses: actions/upload-artifact@master
-      with:
-        name: builder-effective-config.yaml
-        path: output/builder-effective-config.yaml
     - name: Create release
       id: create_release
       uses: actions/create-release@master
