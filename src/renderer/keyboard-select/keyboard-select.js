@@ -80,7 +80,7 @@ function KeyboardSelect(props) {
       case KeyboardNames.InfinityErgodox:
         return pathToImg('img/infinity_ergodox.jpg');
       case KeyboardNames.GeminiDuskDawn:
-        return pathToImg('img/gemini_dawn.png');
+        return pathToImg('img/gemini.png');
       case KeyboardNames.GM107:
         return pathToImg('img/gm107.png');
       default:
