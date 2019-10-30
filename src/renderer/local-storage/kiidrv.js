@@ -74,6 +74,20 @@ const info = {
     "interface": 5,
     "vendor": "Input Club",
     "driver": "libusbK"
+  },
+  {
+    "vid":    "0x308F",
+    "pid":    "0x0014",
+    "interface": 0,
+    "vendor": "Hexgears",
+    "driver": "libusbK"
+  },
+  {
+    "vid":    "0x308F",
+    "pid":    "0x0015",
+    "interface": 0,
+    "vendor": "Hexgears",
+    "driver": "libusbK"
   }
 ]`
 };
