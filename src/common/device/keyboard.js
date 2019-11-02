@@ -85,7 +85,7 @@ function buildKeyboardList() {
     },
     {
       display: names.GeminiDuskDawn,
-      names: ['GeminiDusk', 'GeminiDawn'],
+      names: ['GeminiDuskDawn', 'GeminiDusk', 'GeminiDawn'],
       variants: [variants.Standard],
       visuals: true,
       layouts: layouts([variants.Standard, ['Standard']]),

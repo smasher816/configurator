@@ -26,7 +26,7 @@ function resetConfig() {
 
 export async function loadDefaultConfig(keyboard, variant) {
   const recentDls = _currentState('recentDls');
-  const recent = _.head(recentDls[`${keyboard.keyboard.display}__${variant}`] || []);
+  const recent = _.head(recentDls[`${_.head(keyboard.keyboard.names)}__${variant}`] || []);
 
   if (keyboard.keyboard.non_programmable) return {};
 
