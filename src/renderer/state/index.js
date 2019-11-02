@@ -87,23 +87,29 @@ export async function checkVersion() {
   }
 
   const uri = 'https://api.github.com/repos/hexgears/configurator/releases/latest';
-  const response = await fetch(uri, {
-    method: 'GET',
-    headers: {
-      'User-Agent': 'Kiibohd Configurator',
-      Accept: 'application/json; charset=utf-8'
-    }
-  }).then(r => r.json());
+  try {
+    const response = await fetch(uri, {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Kiibohd Configurator',
+        Accept: 'application/json; charset=utf-8'
+      }
+    }).then(r => r.json());
+    console.log(response);
 
-  const version = electron.remote.app.getVersion();
-  const latest = response.tag_name;
-  const newerAvail = compareVersions(latest, version) > 0;
-  updateNewerVersionAvail(newerAvail);
-  if (newerAvail) {
-    return {
-      version: latest,
-      url: response.html_url
-    };
+    const version = electron.remote.app.getVersion();
+    const latest = response.tag_name;
+    const newerAvail = compareVersions(latest, version) > 0;
+    updateNewerVersionAvail(newerAvail);
+    if (newerAvail) {
+      return {
+        version: latest,
+        url: response.html_url
+      };
+    }
+  } catch (e) {
+    // No version found
+    return;
   }
 }
 
