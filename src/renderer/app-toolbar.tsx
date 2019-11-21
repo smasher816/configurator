@@ -27,7 +27,7 @@ export default function AppToolbar() {
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar variant="dense">
         <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
-          {selectedKeyboard ? selectedKeyboard.keyboard.display : 'Kiibohd Configurator'}
+          {selectedKeyboard ? selectedKeyboard.keyboard.display : 'Azio Configurator'}
         </Typography>
         {toolbarButtons}
       </Toolbar>

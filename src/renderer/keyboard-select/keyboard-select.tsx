@@ -67,19 +67,10 @@ export default function KeyboardSelect() {
 
   const getUrl = () => {
     switch (hovered) {
-      case KeyboardNames.WhiteFox:
-        return pathToImg('img/whitefox.png');
-      case KeyboardNames.Kira:
-        return pathToImg('img/kira.png');
-      case KeyboardNames.KType:
-        return pathToImg('img/k-type.jpg');
-      case KeyboardNames.Infinity60:
-      case KeyboardNames.Infinity60Led:
-        return pathToImg('img/infinity_60.png');
-      case KeyboardNames.InfinityErgodox:
-        return pathToImg('img/infinity_ergodox.jpg');
+      case KeyboardNames.Fokal:
+        return pathToImg('img/azio-fokal.png');
       default:
-        return pathToImg('img/family-photo.png');
+        return 'https://cdn.shopify.com/s/files/1/2975/1466/products/Artisan-1.jpg';
     }
   };
 

@@ -1,13 +1,13 @@
 import localforage from 'localforage';
 
 const coreStore = localforage.createInstance({
-  name: 'kiibohd-configurator',
-  storeName: 'kiibohd-configurator'
+  name: 'azio-configurator',
+  storeName: 'azio-configurator'
 });
 
 const dlStore = localforage.createInstance({
-  name: 'kiibohd-configurator-downloads',
-  storeName: 'kiibohd-configurator-downloads'
+  name: 'azio-configurator-downloads',
+  storeName: 'azio-configurator-downloads'
 });
 
 function set<T>(store: LocalForage): (key: string, value: T) => Promise<T> {

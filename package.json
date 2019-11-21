@@ -1,5 +1,5 @@
 {
-  "name": "kiibohd-configurator",
+  "name": "azio-configurator",
   "version": "1.1.0",
   "description": "Configuration utility for Input Club keyboards",
   "author": "Jeremy Bondeson <jbondeson@gmail.com> (https://input.club)",
@@ -89,8 +89,8 @@
   "build": {
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "buildDependenciesFromSource": true,
-    "productName": "Kiibohd Configurator",
-    "appId": "club.input.KiibohdConfigurator",
+    "productName": "Azio Configurator",
+    "appId": "club.input.azioConfigurator",
     "asar": true,
     "nodeGypRebuild": false,
     "npmRebuild": true,
@@ -114,7 +114,7 @@
         "AppImage",
         "tar.gz"
       ],
-      "executableName": "kiibohd-configurator",
+      "executableName": "azio-configurator",
       "vendor": "Input Club",
       "category": "Utility"
     },
